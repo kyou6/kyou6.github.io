@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+@font-face {
+    font-family: 'Minecraft';
+    src: url('./assets/fonts/Minecraft.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root {
+    font-family: 'Minecraft', monospace;
+    line-height: 1.5;
+    font-weight: 400;
+    -webkit-font-smoothing: none;
+    background-color: #000;
+    color: #fff;
+
+    /* Minecraft UI Colors */
+    --mc-gray-light: #c6c6c6;
+    --mc-gray-dark: #8b8b8b;
+    --mc-border-light: #ffffff;
+    --mc-border-dark: #555555;
+
+    /* 
+      Pixelated Corners using clip-path 
+      Corner Radius ~6px (3 steps: 2px, 2px, 2px)
+      Adjusted for thicker borders visual
+    */
+    --pixel-clip-path: polygon(6px 0, calc(100% - 6px) 0,
+            calc(100% - 6px) 2px, calc(100% - 4px) 2px, calc(100% - 4px) 4px, calc(100% - 2px) 4px, calc(100% - 2px) 6px, 100% 6px,
+            100% calc(100% - 6px), calc(100% - 2px) calc(100% - 6px), calc(100% - 2px) calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) calc(100% - 2px), calc(100% - 6px) calc(100% - 2px), calc(100% - 6px) 100%,
+            6px 100%, 6px calc(100% - 2px), 4px calc(100% - 2px), 4px calc(100% - 4px), 2px calc(100% - 4px), 2px calc(100% - 6px), 0 calc(100% - 6px),
+            0 6px, 2px 6px, 2px 4px, 4px 4px, 4px 2px, 6px 2px);
+
+    /* Top corners only */
+    --pixel-clip-path-t: polygon(6px 0, calc(100% - 6px) 0,
+            calc(100% - 6px) 2px, calc(100% - 4px) 2px, calc(100% - 4px) 4px, calc(100% - 2px) 4px, calc(100% - 2px) 6px, 100% 6px,
+            100% 100%,
+            0 100%,
+            0 6px, 2px 6px, 2px 4px, 4px 4px, 4px 2px, 6px 2px);
+}
+
+body {
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+}
+
+.pixelated {
+    image-rendering: pixelated;
+}
+
+/* Custom Scrollbar for Minecraft Look - made narrower and darker background */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    /* Hiding standard scrollbar mostly, will use custom indicator */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #cccccc;
+    border-radius: 4px;
+}
+
+/* Pixelated Utilities */
+.pixel-corners {
+    clip-path: var(--pixel-clip-path);
+}
+
+.pixel-corners-t {
+    clip-path: var(--pixel-clip-path-t);
+}
+
+.pixel-panel {
+    background-color: var(--mc-gray-light);
+    /* Thick white border simulation */
+    box-shadow:
+        inset 6px 6px 0px 0px var(--mc-border-light),
+        inset -6px -6px 0px 0px var(--mc-border-dark),
+        inset 10px 10px 0px 0px var(--mc-gray-light),
+        inset -10px -10px 0px 0px var(--mc-gray-light);
+}
+
+/* Inner frame for the list */
+.pixel-inset-box {
+    background-color: var(--mc-gray-dark);
+    box-shadow:
+        inset 6px 6px 0px 0px var(--mc-border-dark),
+        inset -6px -6px 0px 0px var(--mc-border-light);
+}
+
+@keyframes splash-pulse {
+    from {
+        transform: rotate(-20deg) scale(1);
+    }
+
+    to {
+        transform: rotate(-20deg) scale(1.1);
+    }
+}
+
+.animate-pulse-fast {
+    animation: splash-pulse 0.6s infinite alternate;
+}
+
+@keyframes pan-bg {
+    0% {
+        background-position: 0% 50%;
+        transform: scale(1.1);
+    }
+
+    50% {
+        background-position: 100% 50%;
+        transform: scale(1.1);
+    }
+
+    100% {
+        background-position: 0% 50%;
+        transform: scale(1.1);
+    }
+}
+
+.animate-pan-slow {
+    animation: pan-bg 120s ease-in-out infinite;
+}
