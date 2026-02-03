@@ -10,22 +10,17 @@ export const World: React.FC = () => {
     const [selectedTab, setSelectedTab] = useState('Create');
     const [selectedOption, setSelectedOption] = useState(0);
 
-    const tabs = ['Load', 'Create', 'Join'];
+    const tabs = ['Load', 'Social', 'Repository'];
 
     // Placeholder icons using colored blocks for now as we don't have the specific assets
     const options = [
-        { label: "Create New World", color: "#4A8F28" },
-        { label: "Play Tutorial", color: "#C68E42" },
-        { label: "The Nightmare Before Christmas World", color: "#3B3B5E" },
-        { label: "Pirates Of The Caribbean World", color: "#8E2F2F" },
-        { label: "Egyptian Mythology World", color: "#D4B85E" },
-        { label: "Norse Mythology World", color: "#7A5C42" },
-        { label: "Festive World", color: "#BA2F2F" },
+        { label: "Introduction", color: "#4A8F28" },
+        { label: "Educational Background", color: "#C68E42" },
     ];
 
     return (
         <div className="flex items-center justify-center w-full h-screen font-minecraft p-4 overflow-hidden">
-            <div className="relative w-[800px] max-w-full flex flex-col">
+            <div className="relative w-full max-w-[800px] flex flex-col h-full max-h-[90vh] sm:max-h-full sm:h-auto justify-center">
 
                 {/* Tabs */}
                 <div className="flex w-full translate-y-[10px] z-10 items-end gap-1">
@@ -42,14 +37,14 @@ export const World: React.FC = () => {
                                 key={tab}
                                 className="flex-1 "
                                 style={{
-                                    height: isActive ? '52px' : '42px',
+                                    height: isActive ? '70px' : '64px',
                                     filter: 'drop-shadow(0 -4px 0 #000) drop-shadow(-4px 0 0 #000) drop-shadow(4px 0 0 #000)',
                                     zIndex: isActive ? 20 : 0,
-                                }}
-                            >
+                                }}>
+                                
                                 <div
                                     className={`
-                                        w-full h-full text-center cursor-pointer relative pixel-corners-t transition-all duration-100
+                                        p-2 w-full h-full text-center text-md cursor-pointer relative pixel-corners-t
                                         ${isActive
                                             ? 'bg-[#c6c6c6] text-[#474747]'
                                             : 'bg-[#8d8d8d] text-[#474747] hover:bg-[#9d9d9d]'
@@ -70,17 +65,20 @@ export const World: React.FC = () => {
                 </div>
 
                 {/* Main Content Box */}
-                <div style={{ filter: 'drop-shadow(0 4px 0 #000) drop-shadow(-4px 0 0 #000) drop-shadow(4px 0 0 #000)' }}>
+                <div
+                    className="w-full flex-1 sm:flex-none sm:h-[640px] flex flex-col"
+                    style={{ filter: 'drop-shadow(0 4px 0 #000) drop-shadow(-4px 0 0 #000) drop-shadow(4px 0 0 #000)' }}
+                >
                     <div
-                        className="relative bg-[#c6c6c6] flex flex-col h-[640px] z-0 pixel-corners"
+                        className="relative bg-[#c6c6c6] flex flex-col h-full z-0 pixel-corners"
                         style={{
                             boxShadow: 'inset 6px 6px 0px 0px #ffffff, inset -6px -6px 0px 0px #555555',
                         }}
                     >
-                        <div className="flex flex-col h-full p-4">
+                        <div className="flex flex-col h-full p-2 sm:p-4">
                             {/* Inner List Container */}
                             <div
-                                className="flex-1 bg-[#8b8b8b] mt-4 mb-4 overflow-y-auto custom-scrollbar relative pt-6"
+                                className="flex-1 bg-[#8b8b8b] mt-4 mb-4 overflow-y-auto custom-scrollbar relative pt-2 sm:pt-6"
                                 style={{
                                     boxShadow: `
                                     inset 6px 6px 0px 0px #373737,
@@ -88,18 +86,19 @@ export const World: React.FC = () => {
                                 `
                                 }}
                             >
-                                <div className="space-y-[4px] p-4">
+                                <div className="space-y-[4px] p-2 sm:p-4">
                                     {options.map((option, index) => {
                                         const isSelected = selectedOption === index;
                                         return (
                                             <MinecraftButton
                                                 key={index}
                                                 isSelected={isSelected}
-                                                className="h-[64px]! justify-start pl-16 transition-transform"
+                                                // Fixed usage of flex for alignment 
+                                                className="h-[64px]! flex items-center justify-start px-4 sm:px-8 md:pl-16 transition-transform gap-4"
                                                 onClick={() => setSelectedOption(index)}
                                             >
-                                                <div className="w-10 h-10 border-2 border-black shrink-0" style={{ backgroundColor: option.color }} />
-                                                <span className="text-xl pt-1">{option.label}</span>
+                                                <div className="w-8 h-8 sm:w-10 sm:h-10 border-2 border-black shrink-0" style={{ backgroundColor: option.color }} />
+                                                <span className="text-sm sm:text-xl pt-1 text-left">{option.label}</span>
                                             </MinecraftButton>
                                         );
                                     })}
@@ -107,7 +106,7 @@ export const World: React.FC = () => {
                             </div>
 
                             {/* Scroll Indicator */}
-                            <div className="absolute right-12 bottom-5 z-20">
+                            <div className="absolute right-6 sm:right-12 bottom-5 z-20">
                                 <div
                                     className="w-0 h-0 animate-bounce"
                                     style={{
@@ -123,16 +122,16 @@ export const World: React.FC = () => {
                 </div>
 
                 {/* Footer Controls */}
-                <div className="flex gap-8 mt-4 text-xl text-white">
-                    <div className="flex items-center gap-3 drop-shadow-[2px_2px_0px_rgba(0,0,0,0.8)]">
-                        <img src={crossBtn} alt="Select" className="w-8 h-8" />
+                <div className="flex gap-4 sm:gap-8 mt-4 text-md sm:text-xl text-white justify-center sm:justify-start">
+                    <div className="flex items-center gap-2 sm:gap-3 drop-shadow-[2px_2px_0px_rgba(0,0,0,0.8)]">
+                        <img src={crossBtn} alt="Select" className="w-6 h-6 sm:w-8 sm:h-8" />
                         <span className="tracking-wide">Select</span>
                     </div>
                     <div
-                        className="flex items-center gap-3 cursor-pointer drop-shadow-[2px_2px_0px_rgba(0,0,0,0.8)] hover:brightness-110"
+                        className="flex items-center gap-2 sm:gap-3 cursor-pointer drop-shadow-[2px_2px_0px_rgba(0,0,0,0.8)] hover:brightness-110"
                         onClick={() => navigate('/')}
                     >
-                        <img src={circleBtn} alt="Back" className="w-8 h-8" />
+                        <img src={circleBtn} alt="Back" className="w-6 h-6 sm:w-8 sm:h-8" />
                         <span className="tracking-wide">Back</span>
                     </div>
                 </div>
