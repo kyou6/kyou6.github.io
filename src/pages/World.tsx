@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { MinecraftButton } from '../components/MinecraftButton';
 import crossBtn from '../assets/ui/ps4/ps4_face_button_down.png';
 import circleBtn from '../assets/ui/ps4/ps4_face_button_right.png';
-import clickSound from '../assets/sound/click.mp3';
+import clickSound from '../assets/sound/click.ogg';
 
 export const World: React.FC = () => {
     const navigate = useNavigate();

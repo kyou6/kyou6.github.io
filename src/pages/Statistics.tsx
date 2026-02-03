@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import circleBtn from '../assets/ui/ps4/ps4_face_button_right.png';
-import clickSound from '../assets/sound/click.mp3';
+import clickSound from '../assets/sound/click.ogg';
 
 export const Statistics: React.FC = () => {
     const navigate = useNavigate();
