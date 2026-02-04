@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import buttonBg from '../assets/buttons/button.png';
 import buttonHoverBg from '../assets/buttons/button_highlighted.png';
 import buttonDisabledBg from '../assets/buttons/button_disabled.png';
-import clickSound from '../assets/sound/click.ogg';
+import clickSound from '../assets/sound/press.wav';
 
 interface MinecraftButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     children: React.ReactNode;
