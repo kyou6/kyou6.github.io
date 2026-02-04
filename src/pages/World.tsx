@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { MinecraftButton } from '../components/MinecraftButton';
 import crossBtn from '../assets/ui/ps4/ps4_face_button_down.png';
 import circleBtn from '../assets/ui/ps4/ps4_face_button_right.png';
-import clickSound from '../assets/sound/click.ogg';
+import clickSound from '../assets/sound/press.wav';
+import backSound from '../assets/sound/back.wav';
 
 export const World: React.FC = () => {
     const navigate = useNavigate();
@@ -129,7 +130,11 @@ export const World: React.FC = () => {
                     </div>
                     <div
                         className="flex items-center gap-2 sm:gap-3 cursor-pointer drop-shadow-[2px_2px_0px_rgba(0,0,0,0.8)] hover:brightness-110"
-                        onClick={() => navigate('/')}
+                        onClick={() => {
+                            const audio = new Audio(backSound);
+                            audio.play().catch(e => console.error("Error playing back sound:", e));
+                            navigate('/');
+                        }}
                     >
                         <img src={circleBtn} alt="Back" className="w-6 h-6 sm:w-8 sm:h-8" />
                         <span className="tracking-wide">Back</span>

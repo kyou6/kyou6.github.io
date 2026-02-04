@@ -3,10 +3,12 @@ import { Home } from './pages/Home';
 import { World } from './pages/World';
 import { Statistics } from './pages/Statistics';
 import { Background } from './components/Background';
+import { MusicPlayer } from './components/MusicPlayer';
 
 function App() {
   return (
     <Router>
+      <MusicPlayer />
       <Background />
       <Routes>
         <Route path="/" element={<Home />} />

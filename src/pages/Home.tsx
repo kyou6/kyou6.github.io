@@ -21,7 +21,7 @@ export const Home: React.FC = () => {
                         <img
                             src={logo}
                             alt="My Portfolio Logo"
-                            className="max-w-[700px] md:max-w-[1000px] lg:max-w-[1200px] w-[90vw] pixelated drop-shadow-[6px_6px_0px_rgba(0,0,0,0.5)]"
+                            className="max-w-[600px] md:max-w-[800px] lg:max-w-[1000px] w-[90vw] pixelated drop-shadow-[6px_6px_0px_rgba(0,0,0,0.5)]"
                         />
                         {/* Splash Text */}
                         <div className="absolute -bottom-4 -right-2 sm:bottom-0 sm:-right-8 md:bottom-8 md:-right-16 text-mc-yellow text-[1.5rem] sm:text-[2rem] md:text-[2.5rem] drop-shadow-[3px_3px_0px_#3f3f3f] animate-pulse-fast whitespace-nowrap z-20 -rotate-20 origin-center">
@@ -41,9 +41,9 @@ export const Home: React.FC = () => {
             </div>
 
             {/* Footer Control Hints */}
-            <div className="w-full p-6 z-20 flex justify-between items-end pb-8 sm:pb-12 px-8 sm:px-16 text-white text-xl sm:text-2xl drop-shadow-[2px_2px_0px_rgba(0,0,0,0.8)] absolute bottom-0">
+            <div className="w-full p-6 z-20 flex justify-between items-end pb-4 sm:pb-8 px-8 sm:px-16 text-white text-xl sm:text-2xl drop-shadow-[2px_2px_0px_rgba(0,0,0,0.8)] absolute bottom-0">
                 <div className="flex items-center gap-3">
-                    <img src={crossBtn} alt="Select" className="w-16 h-16 sm:w-16 sm:h-16" />
+                    <img src={crossBtn} alt="Select" className="w-8 h-8 sm:w-16 sm:h-16" />
                     <span className="tracking-wide">Select</span>
                 </div>
             </div>
