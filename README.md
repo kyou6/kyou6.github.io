@@ -1,4 +1,4 @@
-<h1 align="center">My Portfolio</h1>
+<h1 align="center">Kyou's Portfolio</h1>
 
 <p align="center">
   <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
@@ -6,11 +6,9 @@
   <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="TailwindCSS" />
 </p>
 
-<p align="center">
-  My Minecraft-inspired Portfolio for my Github repository 
-</p>
-
-<img width=100% alt="Banner" src="">
+<div align="center">
+<img width=60% alt="Banner" src="https://github.com/user-attachments/assets/624748bc-cf8f-4ca8-bbc1-ce60be066d30">
+</div>
 
 ## Table of Contents
 - [Usage](#usage)
@@ -25,7 +23,7 @@ Simply visit https://kyou6.github.io/ and explore my portfolio freely
 
 ## Page Preview
 
-<img width="1877" height="649" alt="preview-1" src="" />
+<img width="1905" height="675" alt="preview1" src="https://github.com/user-attachments/assets/fe0cce15-60ca-43fa-9444-00623308faf3" />
 
 ## Installation and Configuration
 
