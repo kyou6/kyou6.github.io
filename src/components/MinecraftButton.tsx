@@ -34,18 +34,21 @@ export const MinecraftButton: React.FC<MinecraftButtonProps> = ({
         }
     };
 
+    const hasHeight = className?.split(' ').some(c => c.startsWith('h-') || c.startsWith('max-h-') || c.startsWith('min-h-'));
+
     return (
         <button
             className={`
-                w-full h-[40px] flex items-center justify-center
-                text-[#e0e0e0] hover:text-[#ffffa0] text-md pt-3
-                bg-contain bg-center bg-no-repeat
+                w-full ${hasHeight ? '' : 'h-10'} flex items-center justify-center
+                text-[#e0e0e0] hover:text-[#ffffa0] text-md pt-1 pb-0.5
+                bg-no-repeat
                 cursor-pointer disabled:cursor-not-allowed
                 font-minecraft
                 ${className || ''}
             `}
             style={{
                 backgroundImage: getBackgroundImage(),
+                backgroundSize: '100% 100%',
                 imageRendering: 'pixelated', // Keep the button crisp
                 textShadow: '2px 2px 0px #3f3f3f'
             }}

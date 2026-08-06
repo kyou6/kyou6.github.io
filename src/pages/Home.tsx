@@ -13,7 +13,7 @@ export const Home: React.FC = () => {
 
     return (
         <div className="relative w-full h-screen overflow-hidden flex flex-col items-center font-minecraft">
-            <div className="flex-1 flex flex-col items-center justify-center w-full max-w-[1400px] px-4">
+            <div className="flex-1 flex flex-col items-center justify-center w-full max-w-350 px-4">
 
                 {/* Logo Section */}
                 <div className="relative mb-8 sm:mb-12 md:mb-16 text-center z-10 flex flex-col items-center scale-90 sm:scale-100 transition-transform duration-300">
@@ -21,10 +21,10 @@ export const Home: React.FC = () => {
                         <img
                             src={logo}
                             alt="My Portfolio Logo"
-                            className="max-w-[600px] md:max-w-[800px] lg:max-w-[1000px] w-[90vw] pixelated drop-shadow-[6px_6px_0px_rgba(0,0,0,0.5)]"
+                            className="max-w-150 md:max-w-200 lg:max-w-250 w-[90vw] pixelated drop-shadow-[6px_6px_0px_rgba(0,0,0,0.5)]"
                         />
                         {/* Splash Text */}
-                        <div className="absolute -bottom-4 -right-2 sm:bottom-0 sm:-right-8 md:bottom-8 md:-right-16 text-mc-yellow text-[1.5rem] sm:text-[2rem] md:text-[2.5rem] drop-shadow-[3px_3px_0px_#3f3f3f] animate-pulse-fast whitespace-nowrap z-20 -rotate-20 origin-center">
+                        <div className="absolute -bottom-4 -right-2 sm:bottom-0 sm:-right-8 md:bottom-8 md:-right-16 text-yellow text-[1.5rem] sm:text-[2rem] md:text-[2.5rem] drop-shadow-[3px_3px_0px_#3f3f3f] animate-pulse-fast whitespace-nowrap z-20 -rotate-20 origin-center">
                             Welcome
                         </div>
                     </div>
@@ -32,11 +32,12 @@ export const Home: React.FC = () => {
 
                 {/* Menu Buttons */}
                 {/* Wider buttons to match console UI style */}
-                <div className="flex flex-col gap-3 w-[85vw] sm:w-[500px] md:w-[600px] lg:w-[700px] z-10 mt-4 md:mt-8">
-                    <MinecraftButton className="h-12 sm:h-14 md:h-16 text-lg sm:text-xl md:text-2xl" onClick={() => navigate('/world')}>Start</MinecraftButton>
-                    <MinecraftButton className="h-12 sm:h-14 md:h-16 text-lg sm:text-xl md:text-2xl" onClick={() => navigate('/statistics')}>Statistics</MinecraftButton>
-                    <MinecraftButton className="h-12 sm:h-14 md:h-16 text-lg sm:text-xl md:text-2xl" onClick={() => window.open("https://github.com/kyou6", "_blank")}>Github</MinecraftButton>
-                    <MinecraftButton className="h-12 sm:h-14 md:h-16 text-lg sm:text-xl md:text-2xl" onClick={() => window.close()}>Exit</MinecraftButton>
+                <div className="flex flex-col gap-3 w-[85vw] sm:w-150 md:w-175 lg:w-200 z-10 mt-4 md:mt-8">
+                    <MinecraftButton className="h-12 sm:h-14 md:h-16 text-sm sm:text-md md:text-lg" onClick={() => navigate('/world')}>Start</MinecraftButton>
+                    <MinecraftButton className="h-12 sm:h-14 md:h-16 text-sm sm:text-md md:text-lg" onClick={() => navigate('/statistics')}>Statistics</MinecraftButton>
+                    <MinecraftButton className="h-12 sm:h-14 md:h-16 text-sm sm:text-md md:text-lg" onClick={() => window.open("https://github.com/kyou6", "_blank")}>Github</MinecraftButton>
+                    <MinecraftButton className="h-12 sm:h-14 md:h-16 text-sm sm:text-md md:text-lg" onClick={() => navigate('/settings/video')}>Help and Options</MinecraftButton>
+                    <MinecraftButton className="h-12 sm:h-14 md:h-16 text-sm sm:text-md md:text-lg" onClick={() => window.close()}>Exit</MinecraftButton>
                 </div>
             </div>
 

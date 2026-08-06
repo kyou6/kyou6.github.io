@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MinecraftButton } from '../components/MinecraftButton';
 import crossBtn from '../assets/ui/ps4/ps4_face_button_down.png';
@@ -6,60 +6,18 @@ import circleBtn from '../assets/ui/ps4/ps4_face_button_right.png';
 import clickSound from '../assets/sound/press.wav';
 import backSound from '../assets/sound/back.wav';
 
-// Map programming languages to colors (GitHub-style)
-const languageColors: Record<string, string> = {
-    TypeScript: '#3178C6',
-    JavaScript: '#F7DF1E',
-    Python: '#3572A5',
-    'C++': '#F34B7D',
-    C: '#555555',
-    Java: '#B07219',
-    HTML: '#E34C26',
-    CSS: '#563D7C',
-    Shell: '#89E051',
-    Rust: '#DEA584',
-    Go: '#00ADD8',
-};
-
-export const World: React.FC = () => {
+export const Test: React.FC = () => {
     const navigate = useNavigate();
-    const [selectedTab, setSelectedTab] = useState('Load');
+    const [selectedTab, setSelectedTab] = useState('Create');
     const [selectedOption, setSelectedOption] = useState(0);
-    const [repos, setRepos] = useState<Array<{ label: string; color: string; path: string; image?: string }>>([]);
 
     const tabs = ['Load', 'Social', 'Repository'];
 
-    useEffect(() => {
-        fetch('https://api.github.com/users/kyou6/repos?sort=updated&per_page=100')
-            .then(res => res.json())
-            .then((data: Array<{ name: string; html_url: string; language: string | null; owner: { avatar_url: string } }>) => {
-                const repoOptions = data.map(repo => ({
-                    label: repo.name,
-                    color: languageColors[repo.language || ''] || '#8B8B8B',
-                    path: repo.html_url,
-                    image: repo.owner?.avatar_url || '',
-                }));
-                setRepos(repoOptions);
-            })
-            .catch(err => console.error('Failed to fetch repos:', err));
-    }, []);
-
-    const tabOptions: Record<string, Array<{ label: string; color: string; path: string; image?: string }>> = {
-        Load: [
-            { label: "Introduction", color: "#4A8F28", path: "/world/load/introduction", image: "https://ccvaults.com/assets/60.%20Interface/30.%20Icons/Icon_Language.png" },
-            { label: "Educational Background", color: "#C68E42", path: "/world/load/educational-background", image: "https://ccvaults.com/assets/10.%20Items/18.%20Consumables/Writable_Book.png" },
-            { label: "Achievements", color: "#3C44AA", path: "/world/load/achievements", image: "https://ccvaults.com/assets/10.%20Items/10.%20Food/Cake.png" },
-            { label: "Resume", color: "#B22222", path: "/world/load/resume", image: "" }
-        ],
-        Social: [
-            { label: "Facebook", color: "#3B5998", path: "/world/social/facebook", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLCoCKdsBj8rLsT_3sweQjXBNQhJu6yfwNJSnTtWo4chbUkNAbPje0fLwy&s=10" },
-            { label: "Instagram", color: "#E1306C", path: "/world/social/instagram", image: "https://dinopixel.com/preload/0123/pixel-art-1673693857.png" },
-            { label: "Youtube", color: "#FF0000", path: "/world/social/youtube", image: "https://cdn.dribbble.com/userupload/21926954/file/original-5837a8ca4c52399c9d90127309036631.jpg" }
-        ],
-        Repository: repos
-    };
-
-    const options = tabOptions[selectedTab] || [];
+    // Placeholder icons using colored blocks for now as we don't have the specific assets
+    const options = [
+        { label: "Introduction", color: "#4A8F28" },
+        { label: "Educational Background", color: "#C68E42" },
+    ];
 
     return (
         <div className="flex items-center justify-center w-full h-screen font-minecraft p-4 overflow-hidden">
@@ -73,7 +31,6 @@ export const World: React.FC = () => {
                             const audio = new Audio(clickSound);
                             audio.play().catch(e => console.error("Error playing click sound:", e));
                             setSelectedTab(tab);
-                            setSelectedOption(0);
                         };
 
                         return (
@@ -138,22 +95,9 @@ export const World: React.FC = () => {
                                                 key={index}
                                                 isSelected={isSelected}
                                                 className="h-[64px]! flex items-center justify-start px-4 sm:px-8 md:pl-16 transition-transform gap-4"
-                                                onClick={() => {
-                                                    setSelectedOption(index);
-                                                    setTimeout(() => {
-                                                        if (option.path.startsWith('http') || option.path.startsWith('https')) {
-                                                            window.open(option.path, '_blank');
-                                                        } else {
-                                                            navigate(option.path);
-                                                        }
-                                                    }, 150);
-                                                }}
+                                                onClick={() => setSelectedOption(index)}
                                             >
-                                                {option.image ? (
-                                                    <img src={option.image} alt={option.label} className={`w-8 h-8 sm:w-10 sm:h-10 shrink-0 border-2 border-black bg-white ${option.image.toLowerCase().endsWith('.png') ? 'p-1' : ''}`} style={{ imageRendering: 'pixelated', objectFit: 'cover' }} />
-                                                ) : (
-                                                    <div className="w-8 h-8 sm:w-10 sm:h-10 border-2 border- shrink-0" style={{ backgroundColor: option.color }} />
-                                                )}
+                                                <div className="w-8 h-8 sm:w-10 sm:h-10 border-2 border-black shrink-0" style={{ backgroundColor: option.color }} />
                                                 <span className="text-sm sm:text-xl text-left">{option.label}</span>
                                             </MinecraftButton>
                                         );
