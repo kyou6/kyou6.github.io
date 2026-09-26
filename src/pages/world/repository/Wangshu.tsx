@@ -1,17 +1,22 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MinecraftButton } from '../../../components/MinecraftButton';
 import circleBtn from '../../../assets/ui/ps4/ps4_face_button_right.png';
-import backSound from '../../../assets/sound/back.wav';
+import { playBackSound } from '../../../utils/sound';
+import { useSubpageNavigation } from '../../../hooks/useMenuNavigation';
 
 export const Wangshu: React.FC = () => {
     const navigate = useNavigate();
 
-    const handleBack = () => {
-        const audio = new Audio(backSound);
-        audio.play().catch(e => console.error(e));
+    const handleBack = useCallback(() => {
+        playBackSound();
         navigate('/world');
-    };
+    }, [navigate]);
+
+    useSubpageNavigation({
+        onBack: handleBack,
+        onEnter: handleBack
+    });
 
     return (
         <div className="flex flex-col items-center justify-center w-full h-screen font-minecraft text-white p-4">
@@ -22,11 +27,11 @@ export const Wangshu: React.FC = () => {
                      style={{ boxShadow: 'inset 6px 6px 0px 0px #373737, inset -6px -6px 0px 0px #ffffff' }}>
                     <p className="mb-4">Details about the Wangshu project repository go here.</p>
                 </div>
-                <MinecraftButton onClick={handleBack}>Go Back to World Menu</MinecraftButton>
+                <MinecraftButton isSelected={true} onClick={handleBack}>Go Back to World Menu</MinecraftButton>
             </div>
             
             <div className="mt-8 flex items-center gap-2 cursor-pointer drop-shadow-[2px_2px_0px_rgba(0,0,0,0.8)]" onClick={handleBack}>
-                <img src={circleBtn} alt="Back" className="w-6 h-6" />
+                <img src={circleBtn} alt="Back" className="w-6 h-6 pixelated" />
                 <span>Back</span>
             </div>
         </div>

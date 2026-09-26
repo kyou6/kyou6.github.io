@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MinecraftButton } from '../components/MinecraftButton';
 import crossBtn from '../assets/ui/ps4/ps4_face_button_down.png';
 import circleBtn from '../assets/ui/ps4/ps4_face_button_right.png';
-import clickSound from '../assets/sound/press.wav';
-import backSound from '../assets/sound/back.wav';
+import bumperLeft from '../assets/ui/ps4/ps4_bumper_left.png';
+import bumperRight from '../assets/ui/ps4/ps4_bumper_right.png';
+import { playPressSound, playBackSound, playScrollSound } from '../utils/sound';
 
 // Map programming languages to colors (GitHub-style)
 const languageColors: Record<string, string> = {
@@ -23,11 +24,13 @@ const languageColors: Record<string, string> = {
 
 export const World: React.FC = () => {
     const navigate = useNavigate();
+    const tabs = ['Load', 'Social', 'Repository'];
     const [selectedTab, setSelectedTab] = useState('Load');
     const [selectedOption, setSelectedOption] = useState(0);
     const [repos, setRepos] = useState<Array<{ label: string; color: string; path: string; image?: string }>>([]);
 
-    const tabs = ['Load', 'Social', 'Repository'];
+    const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
+    const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         fetch('https://api.github.com/users/kyou6/repos?sort=updated&per_page=100')
@@ -61,21 +64,115 @@ export const World: React.FC = () => {
 
     const options = tabOptions[selectedTab] || [];
 
+    const handleTabChange = useCallback((direction: 'next' | 'prev' | string) => {
+        let newTab = selectedTab;
+        if (direction === 'next') {
+            const idx = tabs.indexOf(selectedTab);
+            newTab = tabs[(idx + 1) % tabs.length];
+        } else if (direction === 'prev') {
+            const idx = tabs.indexOf(selectedTab);
+            newTab = tabs[(idx - 1 + tabs.length) % tabs.length];
+        } else if (tabs.includes(direction)) {
+            newTab = direction;
+        }
+
+        if (newTab !== selectedTab) {
+            playPressSound();
+            setSelectedTab(newTab);
+            setSelectedOption(0);
+        }
+    }, [selectedTab, tabs]);
+
+    const handleOpenOption = useCallback((option: { path: string }) => {
+        playPressSound();
+        setTimeout(() => {
+            if (option.path.startsWith('http://') || option.path.startsWith('https://')) {
+                window.open(option.path, '_blank');
+            } else {
+                navigate(option.path);
+            }
+        }, 120);
+    }, [navigate]);
+
+    // Handle Keyboard controls
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                handleTabChange('prev');
+            } else if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                handleTabChange('next');
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (options.length > 0) {
+                    playScrollSound();
+                    setSelectedOption(prev => (prev > 0 ? prev - 1 : options.length - 1));
+                }
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (options.length > 0) {
+                    playScrollSound();
+                    setSelectedOption(prev => (prev < options.length - 1 ? prev + 1 : 0));
+                }
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                if (options[selectedOption]) {
+                    handleOpenOption(options[selectedOption]);
+                }
+            } else if (e.key === 'Escape') {
+                e.preventDefault();
+                playBackSound();
+                navigate('/');
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [options, selectedOption, handleTabChange, handleOpenOption, navigate]);
+
+    // Scroll active item into view
+    useEffect(() => {
+        const el = itemRefs.current[selectedOption];
+        if (el) {
+            el.scrollIntoView({
+                block: 'nearest',
+                behavior: 'smooth'
+            });
+        }
+    }, [selectedOption]);
+
+    // Reset container scroll to top when tab switches
+    useEffect(() => {
+        if (scrollContainerRef.current) {
+            scrollContainerRef.current.scrollTop = 0;
+        }
+    }, [selectedTab]);
+
+    // Ensure selectedOption remains within bounds
+    useEffect(() => {
+        if (selectedOption >= options.length && options.length > 0) {
+            setSelectedOption(0);
+        }
+    }, [options.length, selectedOption]);
+
     return (
         <div className="flex items-center justify-center w-full h-screen font-minecraft p-4 overflow-hidden">
-            <div className="relative w-full max-w-[800px] flex flex-col h-full max-h-[90vh] sm:max-h-full sm:h-auto justify-center">
+            <div className="relative w-full max-w-200 flex flex-col h-full max-h-[90vh] sm:max-h-full sm:h-auto justify-center">
 
                 {/* Tabs */}
-                <div className="relative flex w-full translate-y-[10px] z-10 items-end gap-1">
+                <div className="relative flex w-full translate-y-2.5 z-10 items-end gap-1">
+                    {/* L1 Icon placed outside */}
+                    <div
+                        onClick={() => handleTabChange('prev')}
+                        title="Previous Tab (Left Arrow / L1)"
+                        className="absolute -left-10 sm:-left-12 bottom-4.5 cursor-pointer hover:scale-110 transition-transform hidden sm:flex items-center z-30"
+                    >
+                        <img src={bumperLeft} alt="L1" className="w-8 h-8 pixelated drop-shadow-[2px_2px_0px_#000]" />
+                    </div>
+
                     {tabs.map((tab) => {
                         const isActive = selectedTab === tab;
-                        const handleTabClick = () => {
-                            const audio = new Audio(clickSound);
-                            audio.play().catch(e => console.error("Error playing click sound:", e));
-                            setSelectedTab(tab);
-                            setSelectedOption(0);
-                        };
-
                         return (
                             <div
                                 key={tab}
@@ -97,7 +194,7 @@ export const World: React.FC = () => {
                                     style={{
                                         boxShadow: isActive ? 'inset 6px 6px 0px 0px #ffffff, inset -6px 0px 0px 0px #555555' : 'inset 6px 6px 0px 0px #aaaaaa, inset -6px 0px 0px 0px #555555',
                                     }}
-                                    onClick={handleTabClick}
+                                    onClick={() => handleTabChange(tab)}
                                 >
                                     <div className={`text-md font-bold pt-4 ${isActive ? 'mt-3' : 'mt-2'}`}>
                                         {tab}
@@ -106,11 +203,20 @@ export const World: React.FC = () => {
                             </div>
                         );
                     })}
+
+                    {/* R1 Icon placed outside */}
+                    <div
+                        onClick={() => handleTabChange('next')}
+                        title="Next Tab (Right Arrow / R1)"
+                        className="absolute -right-10 sm:-right-12 bottom-4.5 cursor-pointer hover:scale-110 transition-transform hidden sm:flex items-center z-30"
+                    >
+                        <img src={bumperRight} alt="R1" className="w-8 h-8 pixelated drop-shadow-[2px_2px_0px_#000]" />
+                    </div>
                 </div>
 
                 {/* Main Content Box */}
                 <div
-                    className="relative w-full flex-1 sm:flex-none sm:h-[640px] flex flex-col z-0"
+                    className="relative w-full flex-1 sm:flex-none sm:h-160 flex flex-col z-0"
                     style={{ filter: 'drop-shadow(0 4px 0 #000) drop-shadow(-4px 0 0 #000) drop-shadow(4px 0 0 #000)' }}
                 >
                     <div
@@ -122,6 +228,7 @@ export const World: React.FC = () => {
                         <div className="flex flex-col h-full p-2 sm:p-4">
                             {/* Inner List Container */}
                             <div
+                                ref={scrollContainerRef}
                                 className="flex-1 bg-[#8b8b8b] mt-4 mb-4 overflow-y-auto custom-scrollbar relative pt-2 sm:pt-6"
                                 style={{
                                     boxShadow: `
@@ -130,23 +237,21 @@ export const World: React.FC = () => {
                                 `
                                 }}
                             >
-                                <div className="space-y-[4px] p-2 sm:p-4">
+                                <div className="space-y-1 p-2 sm:p-4">
                                     {options.map((option, index) => {
                                         const isSelected = selectedOption === index;
                                         return (
                                             <MinecraftButton
-                                                key={index}
+                                                key={`${option.label}-${index}`}
+                                                ref={(el) => { itemRefs.current[index] = el; }}
                                                 isSelected={isSelected}
-                                                className="h-[64px]! flex items-center justify-start px-4 sm:px-8 md:pl-16 transition-transform gap-4"
+                                                className="h-16! flex items-center justify-start px-4 sm:px-8 md:pl-16 transition-transform gap-4"
+                                                onMouseEnter={() => {
+                                    setSelectedOption(index);
+                                }}
                                                 onClick={() => {
                                                     setSelectedOption(index);
-                                                    setTimeout(() => {
-                                                        if (option.path.startsWith('http') || option.path.startsWith('https')) {
-                                                            window.open(option.path, '_blank');
-                                                        } else {
-                                                            navigate(option.path);
-                                                        }
-                                                    }, 150);
+                                                    handleOpenOption(option);
                                                 }}
                                             >
                                                 {option.image ? (
@@ -180,18 +285,17 @@ export const World: React.FC = () => {
                 {/* Footer Controls */}
                 <div className="flex gap-4 sm:gap-8 mt-4 text-md sm:text-xl text-white justify-center sm:justify-start">
                     <div className="flex items-center gap-2 sm:gap-3 drop-shadow-[2px_2px_0px_rgba(0,0,0,0.8)]">
-                        <img src={crossBtn} alt="Select" className="w-6 h-6 sm:w-8 sm:h-8" />
+                        <img src={crossBtn} alt="Select" className="w-6 h-6 sm:w-8 sm:h-8 pixelated" />
                         <span className="tracking-wide">Select</span>
                     </div>
                     <div
                         className="flex items-center gap-2 sm:gap-3 cursor-pointer drop-shadow-[2px_2px_0px_rgba(0,0,0,0.8)] hover:brightness-110"
                         onClick={() => {
-                            const audio = new Audio(backSound);
-                            audio.play().catch(e => console.error("Error playing back sound:", e));
+                            playBackSound();
                             navigate('/');
                         }}
                     >
-                        <img src={circleBtn} alt="Back" className="w-6 h-6 sm:w-8 sm:h-8" />
+                        <img src={circleBtn} alt="Back" className="w-6 h-6 sm:w-8 sm:h-8 pixelated" />
                         <span className="tracking-wide">Back</span>
                     </div>
                 </div>

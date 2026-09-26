@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import circleBtn from '../assets/ui/ps4/ps4_face_button_right.png';
-import clickSound from '../assets/sound/press.wav';
+import { playPressSound, playBackSound } from '../utils/sound';
+import { useSubpageNavigation } from '../hooks/useMenuNavigation';
 
 export const Statistics: React.FC = () => {
     const navigate = useNavigate();
@@ -9,17 +10,26 @@ export const Statistics: React.FC = () => {
 
     const tabs = ['Overview'];
 
+    const handleBack = useCallback(() => {
+        playBackSound();
+        navigate('/');
+    }, [navigate]);
+
+    useSubpageNavigation({
+        onBack: handleBack,
+        onEnter: handleBack
+    });
+
     return (
         <div className="flex items-center justify-center w-full h-screen font-minecraft p-4 overflow-hidden">
-            <div className="relative w-[800px] max-w-full flex flex-col">
+            <div className="relative w-200 max-w-full flex flex-col">
 
                 {/* Tabs */}
-                <div className="flex w-full translate-y-[10px] z-10 items-end gap-1">
+                <div className="flex w-full translate-y-2.5 z-10 items-end gap-1">
                     {tabs.map((tab) => {
                         const isActive = selectedTab === tab;
                         const handleTabClick = () => {
-                            const audio = new Audio(clickSound);
-                            audio.play().catch(e => console.error("Error playing click sound:", e));
+                            playPressSound();
                             setSelectedTab(tab);
                         };
 
@@ -58,7 +68,7 @@ export const Statistics: React.FC = () => {
                 {/* Main Content Box */}
                 <div style={{ filter: 'drop-shadow(0 4px 0 #000) drop-shadow(-4px 0 0 #000) drop-shadow(4px 0 0 #000)' }}>
                     <div
-                        className="relative bg-[#c6c6c6] flex flex-col h-[640px] z-0 pixel-corners"
+                        className="relative bg-[#c6c6c6] flex flex-col h-160 z-0 pixel-corners"
                         style={{
                             boxShadow: 'inset 6px 6px 0px 0px #ffffff, inset -6px -6px 0px 0px #555555',
                         }}
@@ -84,9 +94,9 @@ export const Statistics: React.FC = () => {
                 <div className="flex gap-8 mt-4 text-xl text-white">
                     <div
                         className="flex items-center gap-3 cursor-pointer drop-shadow-[2px_2px_0px_rgba(0,0,0,0.8)] hover:brightness-110"
-                        onClick={() => navigate('/')}
+                        onClick={handleBack}
                     >
-                        <img src={circleBtn} alt="Back" className="w-8 h-8" />
+                        <img src={circleBtn} alt="Back" className="w-8 h-8 pixelated" />
                         <span className="tracking-wide">Back</span>
                     </div>
                 </div>
