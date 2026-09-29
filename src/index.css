@@ -50,19 +50,16 @@ body {
     image-rendering: pixelated;
 }
 
-/* Custom Scrollbar for Minecraft Look - made narrower and darker background */
+/* Hide scrollbar while preserving scroll functionality */
+.custom-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
 .custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
-    /* Hiding standard scrollbar mostly, will use custom indicator */
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
+    display: none; /* Chrome, Safari, Opera */
+    width: 0px;
     background: transparent;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #cccccc;
-    border-radius: 4px;
 }
 
 /* Pixelated Utilities */

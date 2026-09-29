@@ -50,10 +50,10 @@ export const MinecraftButton = React.forwardRef<HTMLButtonElement, MinecraftButt
             ref={ref}
             className={`
                 w-full ${hasHeight ? '' : 'h-10'} flex items-center justify-center
-                ${isHighlighted ? 'text-[#ffffa0]' : 'text-[#e0e0e0]'} hover:text-[#ffffa0] text-md pt-1 pb-0.5
+                ${isHighlighted ? 'text-[#ffffa0]' : 'text-[#e0e0e0]'} hover:text-[#ffffa0] text-md
                 bg-no-repeat
                 cursor-pointer disabled:cursor-not-allowed
-                font-minecraft relative overflow-hidden
+                font-minecraft relative
                 ${className || ''}
             `}
             style={{
@@ -79,7 +79,7 @@ export const MinecraftButton = React.forwardRef<HTMLButtonElement, MinecraftButt
                     }}
                 />
             )}
-            <span className="relative z-10 w-full h-full flex items-center justify-center text-center [[class*='justify-start']>&]:justify-start [[class*='justify-start']>&]:text-left">
+            <span className="relative z-10 w-full h-full flex items-center justify-center text-center [[class*='justify-start']>&]:justify-start [[class*='justify-start']>&]:text-left [[class*='gap-']>&]:gap-[inherit]">
                 {children}
             </span>
         </button>
