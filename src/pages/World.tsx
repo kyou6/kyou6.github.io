@@ -157,7 +157,7 @@ export const World: React.FC = () => {
     }, [options.length, selectedOption]);
 
     return (
-        <div className="flex items-center justify-center w-full h-[100dvh] font-minecraft p-2 sm:p-4 overflow-hidden select-none">
+        <div className="flex items-center justify-center w-full h-dvh font-minecraft p-2 sm:p-4 overflow-hidden select-none">
             <div className="relative w-full max-w-200 flex flex-col h-full max-h-[96dvh] sm:max-h-[90vh] justify-center">
 
                 {/* Tabs */}

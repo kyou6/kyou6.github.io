@@ -86,7 +86,7 @@ export const Social: React.FC = () => {
     }, [selectedOption]);
 
     return (
-        <div className="flex items-center justify-center w-full h-[100dvh] font-minecraft p-2 sm:p-4 overflow-hidden select-none">
+        <div className="flex items-center justify-center w-full h-dvh font-minecraft p-2 sm:p-4 overflow-hidden select-none">
             <div className="relative w-full max-w-200 flex flex-col h-full max-h-[96dvh] sm:max-h-[90vh] justify-center">
 
                 {/* Tabs */}
@@ -98,22 +98,28 @@ export const Social: React.FC = () => {
                                 key={tab}
                                 className="flex-1"
                                 style={{
-                                    height: 'clamp(50px, 8vh, 70px)',
+                                    height: isActive ? 'clamp(54px, 8vh, 70px)' : 'clamp(48px, 7vh, 64px)',
                                     filter: 'drop-shadow(0 -4px 0 #000) drop-shadow(-4px 0 0 #000) drop-shadow(4px 0 0 #000)',
-                                    zIndex: 20,
+                                    zIndex: isActive ? 20 : 0,
                                 }}
                             >
                                 <div
-                                    className="p-1 sm:p-2 w-full h-full text-center text-sm sm:text-md cursor-pointer relative pixel-corners-t bg-[#c6c6c6] text-[#474747]"
+                                    className={`p-1 sm:p-2 w-full h-full text-center text-sm sm:text-md cursor-pointer relative pixel-corners-t ${
+                                        isActive
+                                            ? 'bg-[#c6c6c6] text-[#474747]'
+                                            : 'bg-[#8d8d8d] text-[#474747] hover:bg-[#9d9d9d]'
+                                    }`}
                                     style={{
-                                        boxShadow: 'inset 6px 6px 0px 0px #ffffff, inset -6px 0px 0px 0px #555555',
+                                        boxShadow: isActive
+                                            ? 'inset 6px 6px 0px 0px #ffffff, inset -6px 0px 0px 0px #555555'
+                                            : 'inset 6px 6px 0px 0px #aaaaaa, inset -6px 0px 0px 0px #555555',
                                     }}
                                     onClick={() => {
                                         playPressSound();
                                         setSelectedTab(tab);
                                     }}
                                 >
-                                    <div className="text-sm sm:text-md font-bold pt-2 sm:pt-4 mt-2 sm:mt-3">
+                                    <div className={`text-sm sm:text-md font-bold pt-2 sm:pt-4 ${isActive ? 'mt-2 sm:mt-3' : 'mt-1 sm:mt-2'}`}>
                                         {tab}
                                     </div>
                                 </div>
