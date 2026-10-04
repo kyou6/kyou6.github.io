@@ -7,10 +7,6 @@ import { MusicPlayer } from './components/MusicPlayer';
 
 // Import new sub-pages
 import { Video } from './pages/settings/Video';
-import { Introduction } from './pages/world/load/Introduction';
-import { EducationalBackground } from './pages/world/load/EducationalBackground';
-import { Achievements } from './pages/world/load/Achievements';
-import { Resume } from './pages/world/load/Resume';
 import { Facebook } from './pages/world/social/Facebook';
 import { Instagram } from './pages/world/social/Instagram';
 import { Youtube } from './pages/world/social/Youtube';
@@ -29,12 +25,6 @@ function App() {
         
         {/* Settings Routes */}
         <Route path="/settings/video" element={<Video />} />
-        
-        {/* World Load Routes */}
-        <Route path="/world/load/introduction" element={<Introduction />} />
-        <Route path="/world/load/educational-background" element={<EducationalBackground />} />
-        <Route path="/world/load/achievements" element={<Achievements />} />
-        <Route path="/world/load/resume" element={<Resume />} />
         
         {/* World Social Routes */}
         <Route path="/world/social/facebook" element={<Facebook />} />

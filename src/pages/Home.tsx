@@ -32,7 +32,6 @@ export const Home: React.FC = () => {
     const menuItems: MenuItem[] = useMemo(() => [
         { label: "Start", action: () => navigate('/world') },
         { label: "Social", action: () => navigate('/social') },
-        { label: "Github", action: () => window.open("https://github.com/kyou6", "_blank") },
         { label: "Help and Options", action: () => navigate('/settings/video') },
         { label: "Exit", action: () => window.close() },
     ], [navigate]);

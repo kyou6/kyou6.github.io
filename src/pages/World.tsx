@@ -7,6 +7,11 @@ import bumperLeft from '../assets/ui/ps4/ps4_bumper_left.png';
 import bumperRight from '../assets/ui/ps4/ps4_bumper_right.png';
 import { playPressSound, playBackSound, playScrollSound } from '../utils/sound';
 
+import achievementsIcon from '../assets/profile/achievements.png';
+import educationIcon from '../assets/profile/education.png';
+import introductionIcon from '../assets/profile/introduction.png';
+import resumeIcon from '../assets/profile/resume.png';
+
 // Map programming languages to colors (GitHub-style)
 const languageColors: Record<string, string> = {
     TypeScript: '#3178C6',
@@ -24,9 +29,10 @@ const languageColors: Record<string, string> = {
 
 export const World: React.FC = () => {
     const navigate = useNavigate();
-    const tabs = ['Load', 'Social', 'Repository'];
-    const [selectedTab, setSelectedTab] = useState('Load');
+    const tabs = ['Profile', 'Projects', 'Repository'];
+    const [selectedTab, setSelectedTab] = useState('Profile');
     const [selectedOption, setSelectedOption] = useState(0);
+    const [isExpanded, setIsExpanded] = useState(false);
     const [repos, setRepos] = useState<Array<{ label: string; color: string; path: string; image?: string }>>([]);
 
     const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -44,17 +50,66 @@ export const World: React.FC = () => {
                 }));
                 setRepos(repoOptions);
             })
-            .catch(err => console.error('Failed to fetch repos:', err));
+            .catch(err => console.error('Failed to fetch Github repos:', err));
     }, []);
 
-    const tabOptions: Record<string, Array<{ label: string; color: string; path: string; image?: string }>> = {
-        Load: [
-            { label: "Introduction", color: "#4A8F28", path: "/world/load/introduction", image: "https://ccvaults.com/assets/60.%20Interface/30.%20Icons/Icon_Language.png" },
-            { label: "Educational Background", color: "#C68E42", path: "/world/load/educational-background", image: "https://ccvaults.com/assets/10.%20Items/18.%20Consumables/Writable_Book.png" },
-            { label: "Achievements", color: "#3C44AA", path: "/world/load/achievements", image: "https://ccvaults.com/assets/10.%20Items/10.%20Food/Cake.png" },
-            { label: "Resume", color: "#B22222", path: "/world/load/resume", image: "" }
+    interface WorldOption {
+        label: string;
+        color: string;
+        path?: string;
+        image?: string;
+        description?: string;
+        details?: { label: string; value: string }[];
+    }
+
+    const tabOptions: Record<string, Array<WorldOption>> = {
+        Profile: [
+            {
+                label: "Introduction",
+                color: "#4A8F28",
+                image: introductionIcon,
+                description: "Hi! I'm Ryou! I am a UI/UX Designer who aims to design and create novel ideas and concepts, while also solving real-world user constraints.",
+                details: [
+                    { label: "Role", value: "UI/UX Designer" },
+                    { label: "Status", value: "Online / Available" },
+                    { label: "Focus", value: "Game Design, Animation & UI/UX" }
+                ]
+            },
+            {
+                label: "Educational Background",
+                color: "#C68E42",
+                image: educationIcon,
+                description: "My academic background, degrees, relevant coursework, and continuous learning journey in computer science and software development.",
+                details: [
+                    { label: "Field", value: "Information Technology" },
+                    { label: "Level", value: "Bachelor's Degree" },
+                    { label: "Interests", value: "Web Design, Animation & UI/UX" }
+                ]
+            },
+            {
+                label: "Achievements",
+                color: "#3C44AA",
+                image: achievementsIcon,
+                description: "Career highlights, notable accomplishments, project milestones, competitions, and recognized technical deliverables.",
+                details: [
+                    { label: "Milestones", value: "???" },
+                    { label: "Highlights", value: "???" },
+                    { label: "Badges", value: "???" }
+                ]
+            },
+            {
+                label: "Resume",
+                color: "#B22222",
+                image: resumeIcon,
+                description: "Comprehensive professional resume summarizing technical skills, work experience, past projects, and contact information.",
+                details: [
+                    { label: "Experience", value: "2+ Years" },
+                    { label: "Stack", value: "HTML/CSS, JavaScript, Python, C++" },
+                    { label: "Format", value: "Online / Interactive" }
+                ]
+            }
         ],
-        Social: [
+        Projects: [
             { label: "Facebook", color: "#3B5998", path: "/world/social/facebook", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLCoCKdsBj8rLsT_3sweQjXBNQhJu6yfwNJSnTtWo4chbUkNAbPje0fLwy&s=10" },
             { label: "Instagram", color: "#E1306C", path: "/world/social/instagram", image: "https://dinopixel.com/preload/0123/pixel-art-1673693857.png" },
             { label: "Youtube", color: "#FF0000", path: "/world/social/youtube", image: "https://cdn.dribbble.com/userupload/21926954/file/original-5837a8ca4c52399c9d90127309036631.jpg" }
@@ -80,16 +135,18 @@ export const World: React.FC = () => {
             playPressSound();
             setSelectedTab(newTab);
             setSelectedOption(0);
+            setIsExpanded(false);
         }
     }, [selectedTab, tabs]);
 
-    const handleOpenOption = useCallback((option: { path: string }) => {
+    const handleOpenOption = useCallback((option: { path?: string }) => {
+        if (!option.path) return;
         playPressSound();
         setTimeout(() => {
-            if (option.path.startsWith('http://') || option.path.startsWith('https://')) {
+            if (option.path!.startsWith('http://') || option.path!.startsWith('https://')) {
                 window.open(option.path, '_blank');
             } else {
-                navigate(option.path);
+                navigate(option.path!);
             }
         }, 120);
     }, [navigate]);
@@ -117,19 +174,26 @@ export const World: React.FC = () => {
                 }
             } else if (e.key === 'Enter') {
                 e.preventDefault();
-                if (options[selectedOption]) {
+                if (selectedTab === 'Profile' && !isExpanded) {
+                    playPressSound();
+                    setIsExpanded(true);
+                } else if (options[selectedOption]) {
                     handleOpenOption(options[selectedOption]);
                 }
             } else if (e.key === 'Escape') {
                 e.preventDefault();
                 playBackSound();
-                navigate('/');
+                if (isExpanded) {
+                    setIsExpanded(false);
+                } else {
+                    navigate('/');
+                }
             }
         };
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [options, selectedOption, handleTabChange, handleOpenOption, navigate]);
+    }, [options, selectedOption, handleTabChange, handleOpenOption, navigate, selectedTab, isExpanded]);
 
     // Scroll active item into view
     useEffect(() => {
@@ -158,7 +222,7 @@ export const World: React.FC = () => {
 
     return (
         <div className="flex items-center justify-center w-full h-dvh font-minecraft p-2 sm:p-4 overflow-hidden select-none">
-            <div className="relative w-full max-w-200 flex flex-col h-full max-h-[96dvh] sm:max-h-[90vh] justify-center">
+            <div className={`relative w-full ${isExpanded && selectedTab === 'Profile' ? 'max-w-300 lg:max-w-300' : 'max-w-200'} transition-all duration-200 flex flex-col h-full max-h-[96dvh] sm:max-h-[90vh] justify-center`}>
 
                 {/* Tabs */}
                 <div className="relative flex w-full translate-y-2.5 z-10 items-end gap-1">
@@ -225,61 +289,189 @@ export const World: React.FC = () => {
                             boxShadow: 'inset 6px 6px 0px 0px #ffffff, inset -6px -6px 0px 0px #555555',
                         }}
                     >
-                        <div className="flex flex-col h-full p-2 sm:p-8 min-h-0">
-                            {/* Inner List Container */}
-                            <div
-                                ref={scrollContainerRef}
-                                className="flex-1 bg-[#8b8b8b] mt-1 sm:mt-2 mb-1 sm:mb-2 overflow-y-auto custom-scrollbar relative pt-2 sm:pt-4 pb-6 min-h-0 rounded-none"
-                                style={{
-                                    boxShadow: `
-                                    inset 6px 6px 0px 0px #373737,
-                                    inset -6px -6px 0px 0px #ffffff
-                                `
-                                }}
-                            >
-                                <div className="space-y-1.5 sm:space-y-2 p-2 sm:p-6 pb-8">
-                                    {options.map((option, index) => {
-                                        const isSelected = selectedOption === index;
-                                        return (
-                                            <MinecraftButton
-                                                key={`${option.label}-${index}`}
-                                                ref={(el) => { itemRefs.current[index] = el; }}
-                                                isSelected={isSelected}
-                                                className="h-12! sm:h-14! md:h-16! px-3 sm:px-6 md:pl-6 transition-transform shrink-0"
-                                                onMouseEnter={() => {
-                                                    setSelectedOption(index);
-                                                }}
-                                                onClick={() => {
-                                                    setSelectedOption(index);
-                                                    handleOpenOption(option);
-                                                }}
-                                            >
-                                                <div className="flex items-center gap-3 sm:gap-6 w-full h-full">
-                                                    {option.image ? (
-                                                        <img src={option.image} alt={option.label} className={`w-8 h-8 sm:w-10 sm:h-10 shrink-0 border-2 border-black bg-white ${option.image.toLowerCase().endsWith('.png')}`} style={{ imageRendering: 'pixelated', objectFit: 'cover' }} />
-                                                    ) : (
-                                                        <div className="w-8 h-8 sm:w-10 sm:h-10 border-2 border-black shrink-0" style={{ backgroundColor: option.color }} />
+                        <div className="flex flex-col h-full p-2 sm:p-6 min-h-0">
+                            {selectedTab === 'Profile' && isExpanded ? (
+                                <div className="flex flex-col md:flex-row gap-4 h-full min-h-0">
+                                    <div className="flex flex-col min-h-0 h-full w-20 sm:w-24 md:w-28 shrink-0">
+                                        <div className="text-xs sm:text-sm font-bold text-[#474747] mb-1.5 px-1 tracking-wider text-center">
+                                            Select
+                                        </div>
+                                        <div
+                                            ref={scrollContainerRef}
+                                            className="flex-1 bg-[#8b8b8b] mt-1 sm:mt-2 mb-1 sm:mb-2 overflow-y-auto custom-scrollbar relative p-2 sm:p-3 min-h-0 rounded-none"
+                                            style={{
+                                                boxShadow: 'inset 6px 6px 0px 0px #373737, inset -6px -6px 0px 0px #ffffff'
+                                            }}
+                                        >
+                                            <div className="space-y-1.5 sm:space-y-2">
+                                                {options.map((option, index) => {
+                                                    const isSelected = selectedOption === index;
+                                                    return (
+                                                        <MinecraftButton
+                                                            key={`${option.label}-${index}`}
+                                                            ref={(el) => { itemRefs.current[index] = el; }}
+                                                            isSelected={isSelected}
+                                                            className="w-full h-12! sm:h-14! md:h-16! p-0 transition-transform shrink-0"
+                                                            title={option.label}
+                                                            onClick={() => {
+                                                                if (isSelected) {
+                                                                    setIsExpanded(false);
+                                                                } else {
+                                                                    setSelectedOption(index);
+                                                                }
+                                                            }}
+                                                        >
+                                                            <div className="flex items-center justify-center w-full h-full">
+                                                                {option.image ? (
+                                                                    <img
+                                                                        src={option.image}
+                                                                        alt={option.label}
+                                                                        className={`w-8 h-8 sm:w-10 sm:h-10 shrink-0 border-2 border-black bg-white ${option.image.toLowerCase().endsWith('.png') ? '' : ''}`}
+                                                                        style={{ imageRendering: 'pixelated', objectFit: 'cover' }}
+                                                                    />
+                                                                ) : (
+                                                                    <div className="w-8 h-8 sm:w-10 sm:h-10 border-2 border-black shrink-0" style={{ backgroundColor: option.color }} />
+                                                                )}
+                                                            </div>
+                                                        </MinecraftButton>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Right Column: World Details */}
+                                    <div className="flex flex-col min-h-0 h-full flex-1">
+                                        <div className="text-xs sm:text-sm font-bold text-[#474747] mb-1.5 px-1 tracking-wider">
+                                            Details
+                                        </div>
+                                        <div
+                                            className="flex-1 bg-[#8b8b8b] mt-1 sm:mt-2 mb-1 sm:mb-2 overflow-y-auto custom-scrollbar relative p-3 sm:p-5 min-h-0 rounded-none flex flex-col text-white"
+                                            style={{
+                                                boxShadow: 'inset 6px 6px 0px 0px #373737, inset -6px -6px 0px 0px #ffffff'
+                                            }}
+                                        >
+                                            {options[selectedOption] ? (
+                                                <div className="flex flex-col h-full space-y-3.5">
+                                                    {/* Header item with icon & title */}
+                                                    <div className="flex items-center gap-3 pb-3 border-b-2 border-[#555555]">
+                                                        {options[selectedOption].image ? (
+                                                            <img
+                                                                src={options[selectedOption].image}
+                                                                alt={options[selectedOption].label}
+                                                                className="w-10 h-10 shrink-0 border-2 border-black bg-white"
+                                                                style={{ imageRendering: 'pixelated', objectFit: 'cover' }}
+                                                            />
+                                                        ) : (
+                                                            <div
+                                                                className="w-10 h-10 border-2 border-black shrink-0"
+                                                                style={{ backgroundColor: options[selectedOption].color }}
+                                                            />
+                                                        )}
+                                                        <div className="flex flex-col min-w-0">
+                                                            <span className="text-base sm:text-lg font-bold text-[#ffffa0] truncate drop-shadow-[2px_2px_0px_#000]">
+                                                                {options[selectedOption].label}
+                                                            </span>
+                                                            <span className="text-xs text-[#d0d0d0]">
+                                                                World Information
+                                                            </span>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Description paragraph */}
+                                                    <div className="bg-[#727272]/60 p-3 border-2 border-[#555555] text-xs sm:text-sm leading-relaxed text-[#f0f0f0] drop-shadow-[1px_1px_0px_#000]">
+                                                        {options[selectedOption].description || "Details and information for this world will be displayed here."}
+                                                    </div>
+
+                                                    {/* Key details list */}
+                                                    {options[selectedOption].details && (
+                                                        <div className="space-y-1.5 pt-1">
+                                                            {options[selectedOption].details.map((detail, idx) => (
+                                                                <div
+                                                                    key={idx}
+                                                                    className="flex items-center justify-between text-xs sm:text-sm bg-[#5c5c5c]/40 px-3 py-2 border border-[#4a4a4a]"
+                                                                >
+                                                                    <span className="text-[#cccccc]">{detail.label}:</span>
+                                                                    <span className="text-[#ffffa0] font-bold drop-shadow-[1px_1px_0px_#000]">
+                                                                        {detail.value}
+                                                                    </span>
+                                                                </div>
+                                                            ))}
+                                                        </div>
                                                     )}
-                                                    <span className="text-sm sm:text-lg md:text-xl text-left leading-none py-2 truncate">{option.label}</span>
                                                 </div>
-                                            </MinecraftButton>
-                                        );
-                                    })}
+                                            ) : (
+                                                <div className="flex items-center justify-center h-full text-xs sm:text-sm text-[#cccccc]">
+                                                    Select an option to view details
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                            ) : (
+                                /* Standard Full-Width List for initial Load scale and other tabs */
+                                <div
+                                    ref={scrollContainerRef}
+                                    className="flex-1 bg-[#8b8b8b] mt-1 sm:mt-2 mb-1 sm:mb-2 overflow-y-auto custom-scrollbar relative pt-2 sm:pt-4 pb-6 min-h-0 rounded-none"
+                                    style={{
+                                        boxShadow: 'inset 6px 6px 0px 0px #373737, inset -6px -6px 0px 0px #ffffff'
+                                    }}
+                                >
+                                    <div className="space-y-1.5 sm:space-y-2 p-2 sm:p-6 pb-8">
+                                        {options.map((option, index) => {
+                                            const isSelected = selectedOption === index;
+                                            return (
+                                                <MinecraftButton
+                                                    key={`${option.label}-${index}`}
+                                                    ref={(el) => { itemRefs.current[index] = el; }}
+                                                    isSelected={isSelected}
+                                                    className="h-12! sm:h-14! md:h-16! px-3 sm:px-6 md:pl-6 transition-transform shrink-0"
+                                                    onMouseEnter={() => {
+                                                        setSelectedOption(index);
+                                                    }}
+                                                    onClick={() => {
+                                                        setSelectedOption(index);
+                                                        if (selectedTab === 'Profile') {
+                                                            setIsExpanded(true);
+                                                        } else {
+                                                            handleOpenOption(option);
+                                                        }
+                                                    }}
+                                                >
+                                                    <div className="flex items-center gap-3 sm:gap-6 w-full h-full">
+                                                        {option.image ? (
+                                                            <img
+                                                                src={option.image}
+                                                                alt={option.label}
+                                                                className={`w-8 h-8 sm:w-10 sm:h-10 shrink-0 border-2 border-black bg-white ${option.image.toLowerCase().endsWith('.png')}`}
+                                                                style={{ imageRendering: 'pixelated', objectFit: 'cover' }}
+                                                            />
+                                                        ) : (
+                                                            <div className="w-8 h-8 sm:w-10 sm:h-10 border-2 border-black shrink-0" style={{ backgroundColor: option.color }} />
+                                                        )}
+                                                        <span className="text-sm sm:text-lg md:text-xl text-left leading-none py-2 truncate">{option.label}</span>
+                                                    </div>
+                                                </MinecraftButton>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
 
                             {/* Scroll Indicator */}
-                            <div className="absolute right-6 sm:right-12 bottom-5 sm:bottom-6 z-20 pointer-events-none">
-                                <div
-                                    className="w-0 h-0 animate-bounce"
-                                    style={{
-                                        borderLeft: '10px solid transparent',
-                                        borderRight: '10px solid transparent',
-                                        borderTop: '16px solid #ffff55',
-                                        filter: 'drop-shadow(2px 2px 0px #3f3f3f)'
-                                    }}
-                                />
-                            </div>
+                            {(!isExpanded || selectedTab !== 'Profile') && (
+                                <div className="absolute right-6 sm:right-12 bottom-5 sm:bottom-6 z-20 pointer-events-none">
+                                    <div
+                                        className="w-0 h-0 animate-bounce"
+                                        style={{
+                                            borderLeft: '10px solid transparent',
+                                            borderRight: '10px solid transparent',
+                                            borderTop: '16px solid #ffff55',
+                                            filter: 'drop-shadow(2px 2px 0px #3f3f3f)'
+                                        }}
+                                    />
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -294,7 +486,11 @@ export const World: React.FC = () => {
                         className="flex items-center gap-2 sm:gap-3 cursor-pointer drop-shadow-[2px_2px_0px_rgba(0,0,0,0.8)] hover:brightness-110"
                         onClick={() => {
                             playBackSound();
-                            navigate('/');
+                            if (isExpanded) {
+                                setIsExpanded(false);
+                            } else {
+                                navigate('/');
+                            }
                         }}
                     >
                         <img src={circleBtn} alt="Back" className="w-5 h-5 sm:w-8 sm:h-8 pixelated" />

@@ -7,14 +7,14 @@ import { playPressSound, playBackSound } from '../utils/sound';
 
 export const Test: React.FC = () => {
     const navigate = useNavigate();
-    const [selectedTab, setSelectedTab] = useState('Create');
+    const [selectedTab, setSelectedTab] = useState('Profile');
     const [selectedOption, setSelectedOption] = useState(0);
 
-    const tabs = ['Load', 'Social', 'Repository'];
+    const tabs = ['Profile', 'Portfolio', 'Achievements'];
 
     // Placeholder icons using colored blocks for now as we don't have the specific assets
     const options = [
-        { label: "Introduction", color: "#4A8F28" },
+        { label: "About Me", color: "#4A8F28" },
         { label: "Educational Background", color: "#C68E42" },
     ];
 
@@ -40,7 +40,7 @@ export const Test: React.FC = () => {
                                     filter: 'drop-shadow(0 -4px 0 #000) drop-shadow(-4px 0 0 #000) drop-shadow(4px 0 0 #000)',
                                     zIndex: isActive ? 20 : 0,
                                 }}>
-                                
+
                                 <div
                                     className={`
                                         p-2 w-full h-full text-center text-md cursor-pointer relative pixel-corners-t
