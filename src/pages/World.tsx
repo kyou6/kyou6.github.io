@@ -7,6 +7,7 @@ import circleBtn from '../assets/ui/ps4/ps4_face_button_right.png';
 import bumperLeft from '../assets/ui/ps4/ps4_bumper_left.png';
 import bumperRight from '../assets/ui/ps4/ps4_bumper_right.png';
 import { playPressSound, playBackSound, playScrollSound } from '../utils/sound';
+import figmaLogo from '../assets/social/figma.png';
 
 import { profileOptions } from '../data/profile';
 import type { WorldOption } from '../data/profile';
@@ -57,7 +58,13 @@ export const World: React.FC = () => {
         Projects: [
             { label: "Facebook", color: "#3B5998", path: "/world/social/facebook", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLCoCKdsBj8rLsT_3sweQjXBNQhJu6yfwNJSnTtWo4chbUkNAbPje0fLwy&s=10" },
             { label: "Instagram", color: "#E1306C", path: "/world/social/instagram", image: "https://dinopixel.com/preload/0123/pixel-art-1673693857.png" },
-            { label: "Youtube", color: "#FF0000", path: "/world/social/youtube", image: "https://cdn.dribbble.com/userupload/21926954/file/original-5837a8ca4c52399c9d90127309036631.jpg" }
+            { label: "Youtube", color: "#FF0000", path: "/world/social/youtube", image: "https://cdn.dribbble.com/userupload/21926954/file/original-5837a8ca4c52399c9d90127309036631.jpg" },
+            {
+                label: "ExMak: An Examination Result Management System for the Schools Division Office of Makati City",
+                color: "#F24E1E",
+                path: "https://www.figma.com/design/eJIs53zyLPIPdUXtIMOUgz/ExMak?node-id=3131-13673&t=VEmoysO0VyPXxB3V-1",
+                image: figmaLogo
+            }
         ],
         Repository: repos
     };
@@ -146,6 +153,7 @@ export const World: React.FC = () => {
         if (el) {
             el.scrollIntoView({
                 block: 'nearest',
+                inline: 'nearest',
                 behavior: 'smooth'
             });
         }
@@ -234,225 +242,220 @@ export const World: React.FC = () => {
                             boxShadow: 'inset 6px 6px 0px 0px #ffffff, inset -6px -6px 0px 0px #555555',
                         }}
                     >
-                        <div className="flex flex-col h-full p-2 sm:p-6 min-h-0">
+                        <div className="flex flex-col h-full p-2 pt-3 sm:p-6 min-h-0">
                             {selectedTab === 'Profile' && isExpanded ? (
-                                <div className="flex flex-col md:flex-row gap-4 h-full min-h-0">
-                                    <div className="flex flex-col min-h-0 h-full w-20 sm:w-24 md:w-28 shrink-0">
-                                        <div className="text-xs sm:text-sm font-bold text-[#474747] mb-1.5 px-1 tracking-wider text-center">
+                                <div className="flex flex-col md:flex-row gap-2 md:gap-4 h-full min-h-0">
+                                    {/* Select: Horizontal on mobile, vertical column on desktop */}
+                                    <div className="flex flex-col shrink-0 w-full md:w-24 lg:w-28 md:h-full min-h-0">
+                                        <div className="text-xs sm:text-sm font-bold text-[#474747] mb-1 px-1 tracking-wider text-left md:text-center">
                                             Select
                                         </div>
                                         <div
-                                            className="flex-1 bg-[#8b8b8b] mt-1 sm:mt-2 mb-1 sm:mb-2 min-h-0 rounded-none relative overflow-hidden"
+                                            className="bg-[#8b8b8b] mt-0.5 md:mt-1 mb-1 md:mb-2 min-h-0 rounded-none relative overflow-x-auto md:overflow-y-auto custom-scrollbar md:flex-1 p-1.5 sm:p-2 shrink-0"
                                             style={{
-                                                boxShadow: 'inset 6px 6px 0px 0px #373737, inset -6px -6px 0px 0px #ffffff'
+                                                boxShadow: 'inset 4px 4px 0px 0px #373737, inset -4px -4px 0px 0px #ffffff'
                                             }}
                                         >
-                                            <MinecraftScrollbar
-                                                scrollRef={scrollContainerRef}
-                                                contentClassName="p-2 sm:p-3"
-                                                alwaysShow={false}
-                                            >
-                                                <div className="space-y-1.5 sm:space-y-2">
-                                                    {options.map((option, index) => {
-                                                        const isSelected = selectedOption === index;
-                                                        return (
-                                                            <MinecraftButton
-                                                                key={`${option.label}-${index}`}
-                                                                ref={(el) => { itemRefs.current[index] = el; }}
-                                                                isSelected={isSelected}
-                                                                className="w-full h-12! sm:h-14! md:h-16! p-0 transition-transform shrink-0"
-                                                                title={option.label}
-                                                                onClick={() => {
-                                                                    if (isSelected) {
-                                                                        setIsExpanded(false);
-                                                                    } else {
-                                                                        setSelectedOption(index);
-                                                                    }
-                                                                }}
-                                                            >
-                                                                <div className="flex items-center justify-center w-full h-full">
-                                                                    {option.image ? (
-                                                                        <img
-                                                                            src={option.image}
-                                                                            alt={option.label}
-                                                                            className={`w-8 h-8 sm:w-10 sm:h-10 shrink-0 border-2 border-black bg-white ${option.image.toLowerCase().endsWith('.png') ? '' : ''}`}
-                                                                            style={{ imageRendering: 'pixelated', objectFit: 'cover' }}
-                                                                        />
-                                                                    ) : (
-                                                                        <div className="w-8 h-8 sm:w-10 sm:h-10 border-2 border-black shrink-0" style={{ backgroundColor: option.color }} />
-                                                                    )}
-                                                                </div>
-                                                            </MinecraftButton>
-                                                        );
-                                                    })}
-                                                </div>
-                                            </MinecraftScrollbar>
+                                            <div className="flex flex-row md:flex-col gap-1.5 sm:gap-2">
+                                                {options.map((option, index) => {
+                                                    const isSelected = selectedOption === index;
+                                                    return (
+                                                        <MinecraftButton
+                                                            key={`${option.label}-${index}`}
+                                                            ref={(el) => { itemRefs.current[index] = el; }}
+                                                            isSelected={isSelected}
+                                                            className="w-11! h-11! sm:w-13! sm:h-13! md:w-full! md:h-14! lg:h-16! p-0 transition-transform shrink-0"
+                                                            title={option.label}
+                                                            onClick={() => {
+                                                                if (isSelected) {
+                                                                    setIsExpanded(false);
+                                                                } else {
+                                                                    setSelectedOption(index);
+                                                                }
+                                                            }}
+                                                        >
+                                                            <div className="flex items-center justify-center w-full h-full">
+                                                                {option.image ? (
+                                                                    <img
+                                                                        src={option.image}
+                                                                        alt={option.label}
+                                                                        className={`w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 shrink-0 border-2 border-black bg-white ${option.image.toLowerCase().endsWith('.png') ? '' : ''}`}
+                                                                        style={{ imageRendering: 'pixelated', objectFit: 'cover' }}
+                                                                    />
+                                                                ) : (
+                                                                    <div className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 border-2 border-black shrink-0" style={{ backgroundColor: option.color }} />
+                                                                )}
+                                                            </div>
+                                                        </MinecraftButton>
+                                                    );
+                                                })}
+                                            </div>
                                         </div>
                                     </div>
 
-                                    {/* Right Column: World Details */}
+                                    {/* Right / Bottom Column: World Details */}
                                     <div className="flex flex-col min-h-0 h-full flex-1">
-                                        <div className="text-xs sm:text-sm font-bold text-[#474747] mb-1.5 px-1 tracking-wider">
+                                        <div className="text-xs sm:text-sm font-bold text-[#474747] mb-1 px-1 tracking-wider">
                                             Details
                                         </div>
                                         <div
-                                            className="flex-1 bg-[#8b8b8b] mt-1 sm:mt-2 mb-1 sm:mb-2 min-h-0 rounded-none text-white relative overflow-hidden"
+                                            className="flex-1 bg-[#8b8b8b] mt-0.5 md:mt-1 mb-1 md:mb-2 min-h-0 rounded-none text-white relative overflow-hidden"
                                             style={{
                                                 boxShadow: 'inset 6px 6px 0px 0px #373737, inset -6px -6px 0px 0px #ffffff'
                                             }}
                                         >
-                                        <MinecraftScrollbar contentClassName="p-3 sm:p-5">
-                                            {options[selectedOption] ? (
-                                                <div className="flex flex-col h-full space-y-3.5">
-                                                    {/* Header item with icon & title */}
-                                                    <div className="flex items-center gap-3 pb-3 border-b-2 border-[#555555]">
-                                                        {options[selectedOption].image ? (
-                                                            <img
-                                                                src={options[selectedOption].image}
-                                                                alt={options[selectedOption].label}
-                                                                className="w-10 h-10 shrink-0 border-2 border-black bg-white"
-                                                                style={{ imageRendering: 'pixelated', objectFit: 'cover' }}
-                                                            />
-                                                        ) : (
-                                                            <div
-                                                                className="w-10 h-10 border-2 border-black shrink-0"
-                                                                style={{ backgroundColor: options[selectedOption].color }}
-                                                            />
-                                                        )}
-                                                        <div className="flex flex-col min-w-0">
-                                                            <span className="text-base sm:text-lg font-bold text-[#ffffa0] truncate drop-shadow-[2px_2px_0px_#000]">
-                                                                {options[selectedOption].label}
-                                                            </span>
-                                                            <span className="text-xs text-[#d0d0d0]">
-                                                                World Information
-                                                            </span>
+                                            <MinecraftScrollbar contentClassName="p-3 sm:p-5">
+                                                {options[selectedOption] ? (
+                                                    <div className="flex flex-col h-full space-y-3.5">
+                                                        {/* Header item with icon & title */}
+                                                        <div className="flex items-center gap-3 pb-3 border-b-2 border-[#555555]">
+                                                            {options[selectedOption].image ? (
+                                                                <img
+                                                                    src={options[selectedOption].image}
+                                                                    alt={options[selectedOption].label}
+                                                                    className="w-10 h-10 shrink-0 border-2 border-black bg-white"
+                                                                    style={{ imageRendering: 'pixelated', objectFit: 'cover' }}
+                                                                />
+                                                            ) : (
+                                                                <div
+                                                                    className="w-10 h-10 border-2 border-black shrink-0"
+                                                                    style={{ backgroundColor: options[selectedOption].color }}
+                                                                />
+                                                            )}
+                                                            <div className="flex flex-col min-w-0">
+                                                                <span className="text-base sm:text-lg font-bold text-[#ffffa0] truncate drop-shadow-[2px_2px_0px_#000]">
+                                                                    {options[selectedOption].label}
+                                                                </span>
+                                                                <span className="text-xs text-[#d0d0d0]">
+                                                                    World Information
+                                                                </span>
+                                                            </div>
                                                         </div>
-                                                    </div>
 
-                                                    {/* Description paragraph */}
-                                                    <div className="bg-[#727272]/60 p-3 border-2 border-[#555555] text-xs sm:text-sm leading-relaxed text-[#f0f0f0] drop-shadow-[1px_1px_0px_#000]">
-                                                        {options[selectedOption].description || "Details and information for this world will be displayed here."}
-                                                    </div>
+                                                        {/* Description paragraph */}
+                                                        <div className="bg-[#727272]/60 p-2 border-2 border-[#555555] text-xs sm:text-sm leading-relaxed text-[#f0f0f0] drop-shadow-[1px_1px_0px_#000]">
+                                                            {options[selectedOption].description || "Details and information for this world will be displayed here."}
+                                                        </div>
 
-                                                    {/* Key details / Sections list */}
-                                                    {options[selectedOption].sections ? (
-                                                        <div className="space-y-3 pt-1">
-                                                            {options[selectedOption].sections.map((section, sIdx) => (
-                                                                section.roles ? (
-                                                                    <div key={sIdx} className="bg-[#5c5c5c]/40 border border-[#4a4a4a] p-3 sm:p-4 space-y-3">
-                                                                        {/* Company Header with Logo */}
-                                                                        <div className="flex items-center gap-3">
-                                                                            {section.logo || section.image ? (
-                                                                                <img
-                                                                                    src={section.logo || section.image}
-                                                                                    alt={section.company || section.title || ''}
-                                                                                    className="w-10 h-10 sm:w-11 sm:h-11 shrink-0 border border-black bg-white object-contain p-0.5"
-                                                                                    style={{ imageRendering: 'pixelated' }}
-                                                                                />
-                                                                            ) : (
-                                                                                <div className="w-10 h-10 sm:w-11 sm:h-11 shrink-0 border border-black bg-[#404040] flex items-center justify-center font-bold text-base text-[#ffffa0]">
-                                                                                    {(section.company || section.title || 'C')[0]}
+                                                        {/* Key details / Sections list */}
+                                                        {options[selectedOption].sections ? (
+                                                            <div className="space-y-4 pt-1">
+                                                                {options[selectedOption].sections.map((section, sIdx) => (
+                                                                    section.roles ? (
+                                                                        <div key={sIdx} className="bg-[#5c5c5c]/40 border border-[#4a4a4a] p-3 sm:p-4 space-y-2">
+                                                                            {/* Company Header with Logo */}
+                                                                            <div className="flex items-center gap-3">
+                                                                                {section.logo || section.image ? (
+                                                                                    <img
+                                                                                        src={section.logo || section.image}
+                                                                                        alt={section.company || section.title || ''}
+                                                                                        className="w-10 h-10 sm:w-11 sm:h-11 shrink-0 border border-black bg-white object-contain p-0.5"
+                                                                                        style={{ imageRendering: 'pixelated' }}
+                                                                                    />
+                                                                                ) : (
+                                                                                    <div className="w-10 h-10 sm:w-11 sm:h-11 shrink-0 border border-black bg-[#404040] flex items-center justify-center font-bold text-base text-[#ffffa0]">
+                                                                                        {(section.company || section.title || 'C')[0]}
+                                                                                    </div>
+                                                                                )}
+                                                                                <div className="flex flex-col min-w-0">
+                                                                                    <span className="pt-1 text-xs sm:text-base font-bold text-white drop-shadow-[1px_1px_0px_#000] truncate">
+                                                                                        {section.company || section.title}
+                                                                                    </span>
+                                                                                    {section.subtitle && (
+                                                                                        <span className="text-xs text-[#a0a0a0]">
+                                                                                            {section.subtitle}
+                                                                                        </span>
+                                                                                    )}
+                                                                                    {section.location && (
+                                                                                        <span className="text-xs text-[#888888] truncate">
+                                                                                            {section.location}
+                                                                                        </span>
+                                                                                    )}
+                                                                                </div>
+                                                                            </div>
+
+                                                                            {/* Roles Timeline */}
+                                                                            <div className="relative pl-6 sm:pl-7 ml-5 sm:ml-5.5 border-l-2 border-[#555555] space-y-4 pt-1">
+                                                                                {section.roles.map((role, rIdx) => (
+                                                                                    <div key={rIdx} className="relative">
+                                                                                        {/* Timeline Node / Bullet */}
+                                                                                        <div
+                                                                                            className="absolute -left-7.75 sm:-left-8.75 top-1.5 w-2.5 h-2.5 rounded-none bg-[#aaaaaa] border-2 border-[#222222]"
+                                                                                        />
+
+                                                                                        <div className="text-xs sm:text-sm font-bold text-[#ffffa0] drop-shadow-[1px_1px_0px_#000]">
+                                                                                            {role.title}
+                                                                                        </div>
+                                                                                        {role.employmentType && (
+                                                                                            <div className="text-xs text-[#d0d0d0]">
+                                                                                                {role.employmentType}
+                                                                                            </div>
+                                                                                        )}
+                                                                                        {role.period && (
+                                                                                            <div className="text-xs text-[#cccccc]">
+                                                                                                {role.period}
+                                                                                            </div>
+                                                                                        )}
+                                                                                        {role.location && (
+                                                                                            <div className="text-xs text-[#bbbbbb]">
+                                                                                                {role.location}
+                                                                                            </div>
+                                                                                        )}
+                                                                                        {role.description && (
+                                                                                            <div className="text-xs text-[#e0e0e0] mt-1.5 leading-relaxed">
+                                                                                                {role.description}
+                                                                                            </div>
+                                                                                        )}
+                                                                                    </div>
+                                                                                ))}
+                                                                            </div>
+                                                                        </div>
+                                                                    ) : (
+                                                                        <div key={sIdx} className="space-y-1.5">
+                                                                            {section.title && (
+                                                                                <div className="text-xs sm:text-sm font-bold text-[#ffffa0] tracking-wide px-1 drop-shadow-[1px_1px_0px_#000]">
+                                                                                    {section.title}
                                                                                 </div>
                                                                             )}
-                                                                            <div className="flex flex-col min-w-0">
-                                                                                <span className="text-sm sm:text-base font-bold text-white drop-shadow-[1px_1px_0px_#000] truncate">
-                                                                                    {section.company || section.title}
-                                                                                </span>
-                                                                                {section.subtitle && (
-                                                                                    <span className="text-xs text-[#a0a0a0]">
-                                                                                        {section.subtitle}
-                                                                                    </span>
-                                                                                )}
-                                                                                {section.location && (
-                                                                                    <span className="text-xs text-[#888888] truncate">
-                                                                                        {section.location}
-                                                                                    </span>
-                                                                                )}
-                                                                            </div>
-                                                                        </div>
-
-                                                                        {/* Roles Timeline */}
-                                                                        <div className="relative pl-6 sm:pl-7 ml-5 sm:ml-5.5 border-l-2 border-[#555555] space-y-4 pt-1">
-                                                                            {section.roles.map((role, rIdx) => (
-                                                                                <div key={rIdx} className="relative">
-                                                                                    {/* Timeline Node / Bullet */}
-                                                                                    <div 
-                                                                                        className="absolute -left-[31px] sm:-left-[35px] top-1.5 w-2.5 h-2.5 rounded-full bg-[#888888] border border-[#222222]" 
-                                                                                    />
-                                                                                    
-                                                                                    <div className="text-xs sm:text-sm font-bold text-[#ffffa0] drop-shadow-[1px_1px_0px_#000]">
-                                                                                        {role.title}
+                                                                            <div className="space-y-1.5">
+                                                                                {section.items?.map((item, idx) => (
+                                                                                    <div
+                                                                                        key={idx}
+                                                                                        className="flex items-center justify-between text-xs sm:text-sm bg-[#5c5c5c]/40 px-3 py-2 border border-[#4a4a4a]"
+                                                                                    >
+                                                                                        <span className="text-[#cccccc]">{item.label}:</span>
+                                                                                        <span className="text-[#ffffa0] font-bold drop-shadow-[1px_1px_0px_#000] text-right ml-2">
+                                                                                            {item.value}
+                                                                                        </span>
                                                                                     </div>
-                                                                                    {role.employmentType && (
-                                                                                        <div className="text-xs text-[#d0d0d0]">
-                                                                                            {role.employmentType}
-                                                                                        </div>
-                                                                                    )}
-                                                                                    {role.period && (
-                                                                                        <div className="text-xs text-[#aaaaaa]">
-                                                                                            {role.period}
-                                                                                        </div>
-                                                                                    )}
-                                                                                    {role.location && (
-                                                                                        <div className="text-xs text-[#888888]">
-                                                                                            {role.location}
-                                                                                        </div>
-                                                                                    )}
-                                                                                    {role.description && (
-                                                                                        <div className="text-xs text-[#e0e0e0] mt-1.5 leading-relaxed">
-                                                                                            {role.description}
-                                                                                        </div>
-                                                                                    )}
-                                                                                </div>
-                                                                            ))}
-                                                                        </div>
-                                                                    </div>
-                                                                ) : (
-                                                                    <div key={sIdx} className="space-y-1.5">
-                                                                        {section.title && (
-                                                                            <div className="text-xs sm:text-sm font-bold text-[#ffffa0] tracking-wide px-1 drop-shadow-[1px_1px_0px_#000]">
-                                                                                {section.title}
+                                                                                ))}
                                                                             </div>
-                                                                        )}
-                                                                        <div className="space-y-1.5">
-                                                                            {section.items?.map((item, idx) => (
-                                                                                <div
-                                                                                    key={idx}
-                                                                                    className="flex items-center justify-between text-xs sm:text-sm bg-[#5c5c5c]/40 px-3 py-2 border border-[#4a4a4a]"
-                                                                                >
-                                                                                    <span className="text-[#cccccc]">{item.label}:</span>
-                                                                                    <span className="text-[#ffffa0] font-bold drop-shadow-[1px_1px_0px_#000] text-right ml-2">
-                                                                                        {item.value}
-                                                                                    </span>
-                                                                                </div>
-                                                                            ))}
                                                                         </div>
+                                                                    )
+                                                                ))}
+                                                            </div>
+                                                        ) : options[selectedOption].details ? (
+                                                            <div className="space-y-1.5 pt-1">
+                                                                {options[selectedOption].details.map((detail, idx) => (
+                                                                    <div
+                                                                        key={idx}
+                                                                        className="flex items-center justify-between text-xs sm:text-sm bg-[#5c5c5c]/40 px-3 py-2 border border-[#4a4a4a]"
+                                                                    >
+                                                                        <span className="text-[#cccccc]">{detail.label}:</span>
+                                                                        <span className="text-[#ffffa0] font-bold drop-shadow-[1px_1px_0px_#000] text-right ml-2">
+                                                                            {detail.value}
+                                                                        </span>
                                                                     </div>
-                                                                )
-                                                            ))}
-                                                        </div>
-                                                    ) : options[selectedOption].details ? (
-                                                        <div className="space-y-1.5 pt-1">
-                                                            {options[selectedOption].details.map((detail, idx) => (
-                                                                <div
-                                                                    key={idx}
-                                                                    className="flex items-center justify-between text-xs sm:text-sm bg-[#5c5c5c]/40 px-3 py-2 border border-[#4a4a4a]"
-                                                                >
-                                                                    <span className="text-[#cccccc]">{detail.label}:</span>
-                                                                    <span className="text-[#ffffa0] font-bold drop-shadow-[1px_1px_0px_#000] text-right ml-2">
-                                                                        {detail.value}
-                                                                    </span>
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                    ) : null}
-                                                </div>
-                                            ) : (
-                                                <div className="flex items-center justify-center h-full text-xs sm:text-sm text-[#cccccc]">
-                                                    Select an option to view details
-                                                </div>
-                                            )}
-                                        </MinecraftScrollbar>
+                                                                ))}
+                                                            </div>
+                                                        ) : null}
+                                                    </div>
+                                                ) : (
+                                                    <div className="flex items-center justify-center h-full text-xs sm:text-sm text-[#cccccc]">
+                                                        Select an option to view details
+                                                    </div>
+                                                )}
+                                            </MinecraftScrollbar>
                                         </div>
                                     </div>
                                 </div>
