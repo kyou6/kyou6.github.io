@@ -2,10 +2,10 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MinecraftButton } from '../components/MinecraftButton';
 import { MinecraftScrollbar } from '../components/MinecraftScrollbar';
-import crossBtn from '../assets/ui/ps4/ps4_face_button_down.png';
-import circleBtn from '../assets/ui/ps4/ps4_face_button_right.png';
-import bumperLeft from '../assets/ui/ps4/ps4_bumper_left.png';
-import bumperRight from '../assets/ui/ps4/ps4_bumper_right.png';
+import crossBtn from '../assets/ui/xbox/ButtonA.png';
+import circleBtn from '../assets/ui/xbox/ButtonB.png';
+import bumperLeft from '../assets/ui/xbox/ButtonLeftBumper.png';
+import bumperRight from '../assets/ui/xbox/ButtonRightBumper.png';
 import { playPressSound, playBackSound, playScrollSound } from '../utils/sound';
 import figmaLogo from '../assets/social/figma.png';
 
@@ -56,9 +56,6 @@ export const World: React.FC = () => {
     const tabOptions: Record<string, Array<WorldOption>> = {
         Profile: profileOptions,
         Projects: [
-            { label: "Facebook", color: "#3B5998", path: "/world/social/facebook", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLCoCKdsBj8rLsT_3sweQjXBNQhJu6yfwNJSnTtWo4chbUkNAbPje0fLwy&s=10" },
-            { label: "Instagram", color: "#E1306C", path: "/world/social/instagram", image: "https://dinopixel.com/preload/0123/pixel-art-1673693857.png" },
-            { label: "Youtube", color: "#FF0000", path: "/world/social/youtube", image: "https://cdn.dribbble.com/userupload/21926954/file/original-5837a8ca4c52399c9d90127309036631.jpg" },
             {
                 label: "ExMak: An Examination Result Management System for the Schools Division Office of Makati City",
                 color: "#F24E1E",
@@ -182,10 +179,10 @@ export const World: React.FC = () => {
                     {/* L1 Icon placed outside */}
                     <div
                         onClick={() => handleTabChange('prev')}
-                        title="Previous Tab (Left Arrow / L1)"
+                        title="Previous Tab (Left Arrow / LB)"
                         className="absolute -left-10 sm:-left-12 bottom-4.5 cursor-pointer hover:scale-110 transition-transform hidden sm:flex items-center z-30"
                     >
-                        <img src={bumperLeft} alt="L1" className="w-8 h-8 pixelated drop-shadow-[2px_2px_0px_#000]" />
+                        <img src={bumperLeft} alt="LB" className="w-8 h-8 pixelated drop-shadow-[2px_2px_0px_#000]" />
                     </div>
 
                     {tabs.map((tab) => {
@@ -221,13 +218,13 @@ export const World: React.FC = () => {
                         );
                     })}
 
-                    {/* R1 Icon placed outside */}
+                    {/* RB Icon placed outside */}
                     <div
                         onClick={() => handleTabChange('next')}
-                        title="Next Tab (Right Arrow / R1)"
+                        title="Next Tab (Right Arrow / RB)"
                         className="absolute -right-10 sm:-right-12 bottom-4.5 cursor-pointer hover:scale-110 transition-transform hidden sm:flex items-center z-30"
                     >
-                        <img src={bumperRight} alt="R1" className="w-8 h-8 pixelated drop-shadow-[2px_2px_0px_#000]" />
+                        <img src={bumperRight} alt="RB" className="w-8 h-8 pixelated drop-shadow-[2px_2px_0px_#000]" />
                     </div>
                 </div>
 

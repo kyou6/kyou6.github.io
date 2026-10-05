@@ -2,8 +2,8 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MinecraftButton } from '../components/MinecraftButton';
 import logo from '../assets/ui/icons/logo.png';
-import crossBtn from '../assets/ui/ps4/ps4_face_button_down.png';
-import circleBtn from '../assets/ui/ps4/ps4_face_button_right.png';
+import crossBtn from '../assets/ui/xbox/ButtonA.png';
+import circleBtn from '../assets/ui/xbox/ButtonB.png';
 import { playPressSound, playBackSound, playScrollSound } from '../utils/sound';
 import splashRaw from '../components/Splash.txt?raw';
 
@@ -32,7 +32,7 @@ export const Home: React.FC = () => {
     const menuItems: MenuItem[] = useMemo(() => [
         { label: "Start", action: () => navigate('/world') },
         { label: "Social", action: () => navigate('/social') },
-        { label: "Help and Options", action: () => navigate('/settings/video') },
+        { label: "Help and Options", action: () => navigate('/settings') },
         { label: "Exit", action: () => window.close() },
     ], [navigate]);
 

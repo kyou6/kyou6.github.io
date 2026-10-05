@@ -4,24 +4,26 @@ import { World } from './pages/World';
 import { Social } from './pages/Social';
 import { Background } from './components/Background';
 import { MusicPlayer } from './components/MusicPlayer';
-
-// Import new sub-pages
-import { Video } from './pages/settings/Video';
+import { SettingsProvider } from './context/SettingsContext';
+import { Settings } from './pages/Settings';
 
 function App() {
   return (
-    <Router>
-      <MusicPlayer />
-      <Background />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/world" element={<World />} />
-        <Route path="/social" element={<Social />} />
-        
-        {/* Settings Routes */}
-        <Route path="/settings/video" element={<Video />} />
-      </Routes>
-    </Router>
+    <SettingsProvider>
+      <Router>
+        <MusicPlayer />
+        <Background />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/world" element={<World />} />
+          <Route path="/social" element={<Social />} />
+          
+          {/* Settings Routes */}
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/settings/video" element={<Settings />} />
+        </Routes>
+      </Router>
+    </SettingsProvider>
   );
 }
 

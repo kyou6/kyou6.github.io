@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import circleBtn from '../assets/ui/ps4/ps4_face_button_right.png';
+import circleBtn from '../assets/ui/xbox/ButtonB.png';
 import { playPressSound, playBackSound } from '../utils/sound';
 import { useSubpageNavigation } from '../hooks/useMenuNavigation';
 
