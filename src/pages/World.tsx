@@ -1,16 +1,15 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MinecraftButton } from '../components/MinecraftButton';
+import { MinecraftScrollbar } from '../components/MinecraftScrollbar';
 import crossBtn from '../assets/ui/ps4/ps4_face_button_down.png';
 import circleBtn from '../assets/ui/ps4/ps4_face_button_right.png';
 import bumperLeft from '../assets/ui/ps4/ps4_bumper_left.png';
 import bumperRight from '../assets/ui/ps4/ps4_bumper_right.png';
 import { playPressSound, playBackSound, playScrollSound } from '../utils/sound';
 
-import achievementsIcon from '../assets/profile/achievements.png';
-import educationIcon from '../assets/profile/education.png';
-import introductionIcon from '../assets/profile/introduction.png';
-import resumeIcon from '../assets/profile/resume.png';
+import { profileOptions } from '../data/profile';
+import type { WorldOption } from '../data/profile';
 
 // Map programming languages to colors (GitHub-style)
 const languageColors: Record<string, string> = {
@@ -32,7 +31,7 @@ export const World: React.FC = () => {
     const tabs = ['Profile', 'Projects', 'Repository'];
     const [selectedTab, setSelectedTab] = useState('Profile');
     const [selectedOption, setSelectedOption] = useState(0);
-    const [isExpanded, setIsExpanded] = useState(false);
+    const [isExpanded, setIsExpanded] = useState(true);
     const [repos, setRepos] = useState<Array<{ label: string; color: string; path: string; image?: string }>>([]);
 
     const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -53,62 +52,8 @@ export const World: React.FC = () => {
             .catch(err => console.error('Failed to fetch Github repos:', err));
     }, []);
 
-    interface WorldOption {
-        label: string;
-        color: string;
-        path?: string;
-        image?: string;
-        description?: string;
-        details?: { label: string; value: string }[];
-    }
-
     const tabOptions: Record<string, Array<WorldOption>> = {
-        Profile: [
-            {
-                label: "Introduction",
-                color: "#4A8F28",
-                image: introductionIcon,
-                description: "Hi! I'm Ryou! I am a UI/UX Designer who aims to design and create novel ideas and concepts, while also solving real-world user constraints.",
-                details: [
-                    { label: "Role", value: "UI/UX Designer" },
-                    { label: "Status", value: "Online / Available" },
-                    { label: "Focus", value: "Game Design, Animation & UI/UX" }
-                ]
-            },
-            {
-                label: "Educational Background",
-                color: "#C68E42",
-                image: educationIcon,
-                description: "My academic background, degrees, relevant coursework, and continuous learning journey in computer science and software development.",
-                details: [
-                    { label: "Field", value: "Information Technology" },
-                    { label: "Level", value: "Bachelor's Degree" },
-                    { label: "Interests", value: "Web Design, Animation & UI/UX" }
-                ]
-            },
-            {
-                label: "Achievements",
-                color: "#3C44AA",
-                image: achievementsIcon,
-                description: "Career highlights, notable accomplishments, project milestones, competitions, and recognized technical deliverables.",
-                details: [
-                    { label: "Milestones", value: "???" },
-                    { label: "Highlights", value: "???" },
-                    { label: "Badges", value: "???" }
-                ]
-            },
-            {
-                label: "Resume",
-                color: "#B22222",
-                image: resumeIcon,
-                description: "Comprehensive professional resume summarizing technical skills, work experience, past projects, and contact information.",
-                details: [
-                    { label: "Experience", value: "2+ Years" },
-                    { label: "Stack", value: "HTML/CSS, JavaScript, Python, C++" },
-                    { label: "Format", value: "Online / Interactive" }
-                ]
-            }
-        ],
+        Profile: profileOptions,
         Projects: [
             { label: "Facebook", color: "#3B5998", path: "/world/social/facebook", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLCoCKdsBj8rLsT_3sweQjXBNQhJu6yfwNJSnTtWo4chbUkNAbPje0fLwy&s=10" },
             { label: "Instagram", color: "#E1306C", path: "/world/social/instagram", image: "https://dinopixel.com/preload/0123/pixel-art-1673693857.png" },
@@ -118,6 +63,7 @@ export const World: React.FC = () => {
     };
 
     const options = tabOptions[selectedTab] || [];
+
 
     const handleTabChange = useCallback((direction: 'next' | 'prev' | string) => {
         let newTab = selectedTab;
@@ -135,7 +81,6 @@ export const World: React.FC = () => {
             playPressSound();
             setSelectedTab(newTab);
             setSelectedOption(0);
-            setIsExpanded(false);
         }
     }, [selectedTab, tabs]);
 
@@ -297,46 +242,51 @@ export const World: React.FC = () => {
                                             Select
                                         </div>
                                         <div
-                                            ref={scrollContainerRef}
-                                            className="flex-1 bg-[#8b8b8b] mt-1 sm:mt-2 mb-1 sm:mb-2 overflow-y-auto custom-scrollbar relative p-2 sm:p-3 min-h-0 rounded-none"
+                                            className="flex-1 bg-[#8b8b8b] mt-1 sm:mt-2 mb-1 sm:mb-2 min-h-0 rounded-none relative overflow-hidden"
                                             style={{
                                                 boxShadow: 'inset 6px 6px 0px 0px #373737, inset -6px -6px 0px 0px #ffffff'
                                             }}
                                         >
-                                            <div className="space-y-1.5 sm:space-y-2">
-                                                {options.map((option, index) => {
-                                                    const isSelected = selectedOption === index;
-                                                    return (
-                                                        <MinecraftButton
-                                                            key={`${option.label}-${index}`}
-                                                            ref={(el) => { itemRefs.current[index] = el; }}
-                                                            isSelected={isSelected}
-                                                            className="w-full h-12! sm:h-14! md:h-16! p-0 transition-transform shrink-0"
-                                                            title={option.label}
-                                                            onClick={() => {
-                                                                if (isSelected) {
-                                                                    setIsExpanded(false);
-                                                                } else {
-                                                                    setSelectedOption(index);
-                                                                }
-                                                            }}
-                                                        >
-                                                            <div className="flex items-center justify-center w-full h-full">
-                                                                {option.image ? (
-                                                                    <img
-                                                                        src={option.image}
-                                                                        alt={option.label}
-                                                                        className={`w-8 h-8 sm:w-10 sm:h-10 shrink-0 border-2 border-black bg-white ${option.image.toLowerCase().endsWith('.png') ? '' : ''}`}
-                                                                        style={{ imageRendering: 'pixelated', objectFit: 'cover' }}
-                                                                    />
-                                                                ) : (
-                                                                    <div className="w-8 h-8 sm:w-10 sm:h-10 border-2 border-black shrink-0" style={{ backgroundColor: option.color }} />
-                                                                )}
-                                                            </div>
-                                                        </MinecraftButton>
-                                                    );
-                                                })}
-                                            </div>
+                                            <MinecraftScrollbar
+                                                scrollRef={scrollContainerRef}
+                                                contentClassName="p-2 sm:p-3"
+                                                alwaysShow={false}
+                                            >
+                                                <div className="space-y-1.5 sm:space-y-2">
+                                                    {options.map((option, index) => {
+                                                        const isSelected = selectedOption === index;
+                                                        return (
+                                                            <MinecraftButton
+                                                                key={`${option.label}-${index}`}
+                                                                ref={(el) => { itemRefs.current[index] = el; }}
+                                                                isSelected={isSelected}
+                                                                className="w-full h-12! sm:h-14! md:h-16! p-0 transition-transform shrink-0"
+                                                                title={option.label}
+                                                                onClick={() => {
+                                                                    if (isSelected) {
+                                                                        setIsExpanded(false);
+                                                                    } else {
+                                                                        setSelectedOption(index);
+                                                                    }
+                                                                }}
+                                                            >
+                                                                <div className="flex items-center justify-center w-full h-full">
+                                                                    {option.image ? (
+                                                                        <img
+                                                                            src={option.image}
+                                                                            alt={option.label}
+                                                                            className={`w-8 h-8 sm:w-10 sm:h-10 shrink-0 border-2 border-black bg-white ${option.image.toLowerCase().endsWith('.png') ? '' : ''}`}
+                                                                            style={{ imageRendering: 'pixelated', objectFit: 'cover' }}
+                                                                        />
+                                                                    ) : (
+                                                                        <div className="w-8 h-8 sm:w-10 sm:h-10 border-2 border-black shrink-0" style={{ backgroundColor: option.color }} />
+                                                                    )}
+                                                                </div>
+                                                            </MinecraftButton>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </MinecraftScrollbar>
                                         </div>
                                     </div>
 
@@ -346,11 +296,12 @@ export const World: React.FC = () => {
                                             Details
                                         </div>
                                         <div
-                                            className="flex-1 bg-[#8b8b8b] mt-1 sm:mt-2 mb-1 sm:mb-2 overflow-y-auto custom-scrollbar relative p-3 sm:p-5 min-h-0 rounded-none flex flex-col text-white"
+                                            className="flex-1 bg-[#8b8b8b] mt-1 sm:mt-2 mb-1 sm:mb-2 min-h-0 rounded-none text-white relative overflow-hidden"
                                             style={{
                                                 boxShadow: 'inset 6px 6px 0px 0px #373737, inset -6px -6px 0px 0px #ffffff'
                                             }}
                                         >
+                                        <MinecraftScrollbar contentClassName="p-3 sm:p-5">
                                             {options[selectedOption] ? (
                                                 <div className="flex flex-col h-full space-y-3.5">
                                                     {/* Header item with icon & title */}
@@ -383,8 +334,104 @@ export const World: React.FC = () => {
                                                         {options[selectedOption].description || "Details and information for this world will be displayed here."}
                                                     </div>
 
-                                                    {/* Key details list */}
-                                                    {options[selectedOption].details && (
+                                                    {/* Key details / Sections list */}
+                                                    {options[selectedOption].sections ? (
+                                                        <div className="space-y-3 pt-1">
+                                                            {options[selectedOption].sections.map((section, sIdx) => (
+                                                                section.roles ? (
+                                                                    <div key={sIdx} className="bg-[#5c5c5c]/40 border border-[#4a4a4a] p-3 sm:p-4 space-y-3">
+                                                                        {/* Company Header with Logo */}
+                                                                        <div className="flex items-center gap-3">
+                                                                            {section.logo || section.image ? (
+                                                                                <img
+                                                                                    src={section.logo || section.image}
+                                                                                    alt={section.company || section.title || ''}
+                                                                                    className="w-10 h-10 sm:w-11 sm:h-11 shrink-0 border border-black bg-white object-contain p-0.5"
+                                                                                    style={{ imageRendering: 'pixelated' }}
+                                                                                />
+                                                                            ) : (
+                                                                                <div className="w-10 h-10 sm:w-11 sm:h-11 shrink-0 border border-black bg-[#404040] flex items-center justify-center font-bold text-base text-[#ffffa0]">
+                                                                                    {(section.company || section.title || 'C')[0]}
+                                                                                </div>
+                                                                            )}
+                                                                            <div className="flex flex-col min-w-0">
+                                                                                <span className="text-sm sm:text-base font-bold text-white drop-shadow-[1px_1px_0px_#000] truncate">
+                                                                                    {section.company || section.title}
+                                                                                </span>
+                                                                                {section.subtitle && (
+                                                                                    <span className="text-xs text-[#a0a0a0]">
+                                                                                        {section.subtitle}
+                                                                                    </span>
+                                                                                )}
+                                                                                {section.location && (
+                                                                                    <span className="text-xs text-[#888888] truncate">
+                                                                                        {section.location}
+                                                                                    </span>
+                                                                                )}
+                                                                            </div>
+                                                                        </div>
+
+                                                                        {/* Roles Timeline */}
+                                                                        <div className="relative pl-6 sm:pl-7 ml-5 sm:ml-5.5 border-l-2 border-[#555555] space-y-4 pt-1">
+                                                                            {section.roles.map((role, rIdx) => (
+                                                                                <div key={rIdx} className="relative">
+                                                                                    {/* Timeline Node / Bullet */}
+                                                                                    <div 
+                                                                                        className="absolute -left-[31px] sm:-left-[35px] top-1.5 w-2.5 h-2.5 rounded-full bg-[#888888] border border-[#222222]" 
+                                                                                    />
+                                                                                    
+                                                                                    <div className="text-xs sm:text-sm font-bold text-[#ffffa0] drop-shadow-[1px_1px_0px_#000]">
+                                                                                        {role.title}
+                                                                                    </div>
+                                                                                    {role.employmentType && (
+                                                                                        <div className="text-xs text-[#d0d0d0]">
+                                                                                            {role.employmentType}
+                                                                                        </div>
+                                                                                    )}
+                                                                                    {role.period && (
+                                                                                        <div className="text-xs text-[#aaaaaa]">
+                                                                                            {role.period}
+                                                                                        </div>
+                                                                                    )}
+                                                                                    {role.location && (
+                                                                                        <div className="text-xs text-[#888888]">
+                                                                                            {role.location}
+                                                                                        </div>
+                                                                                    )}
+                                                                                    {role.description && (
+                                                                                        <div className="text-xs text-[#e0e0e0] mt-1.5 leading-relaxed">
+                                                                                            {role.description}
+                                                                                        </div>
+                                                                                    )}
+                                                                                </div>
+                                                                            ))}
+                                                                        </div>
+                                                                    </div>
+                                                                ) : (
+                                                                    <div key={sIdx} className="space-y-1.5">
+                                                                        {section.title && (
+                                                                            <div className="text-xs sm:text-sm font-bold text-[#ffffa0] tracking-wide px-1 drop-shadow-[1px_1px_0px_#000]">
+                                                                                {section.title}
+                                                                            </div>
+                                                                        )}
+                                                                        <div className="space-y-1.5">
+                                                                            {section.items?.map((item, idx) => (
+                                                                                <div
+                                                                                    key={idx}
+                                                                                    className="flex items-center justify-between text-xs sm:text-sm bg-[#5c5c5c]/40 px-3 py-2 border border-[#4a4a4a]"
+                                                                                >
+                                                                                    <span className="text-[#cccccc]">{item.label}:</span>
+                                                                                    <span className="text-[#ffffa0] font-bold drop-shadow-[1px_1px_0px_#000] text-right ml-2">
+                                                                                        {item.value}
+                                                                                    </span>
+                                                                                </div>
+                                                                            ))}
+                                                                        </div>
+                                                                    </div>
+                                                                )
+                                                            ))}
+                                                        </div>
+                                                    ) : options[selectedOption].details ? (
                                                         <div className="space-y-1.5 pt-1">
                                                             {options[selectedOption].details.map((detail, idx) => (
                                                                 <div
@@ -392,19 +439,20 @@ export const World: React.FC = () => {
                                                                     className="flex items-center justify-between text-xs sm:text-sm bg-[#5c5c5c]/40 px-3 py-2 border border-[#4a4a4a]"
                                                                 >
                                                                     <span className="text-[#cccccc]">{detail.label}:</span>
-                                                                    <span className="text-[#ffffa0] font-bold drop-shadow-[1px_1px_0px_#000]">
+                                                                    <span className="text-[#ffffa0] font-bold drop-shadow-[1px_1px_0px_#000] text-right ml-2">
                                                                         {detail.value}
                                                                     </span>
                                                                 </div>
                                                             ))}
                                                         </div>
-                                                    )}
+                                                    ) : null}
                                                 </div>
                                             ) : (
                                                 <div className="flex items-center justify-center h-full text-xs sm:text-sm text-[#cccccc]">
                                                     Select an option to view details
                                                 </div>
                                             )}
+                                        </MinecraftScrollbar>
                                         </div>
                                     </div>
                                 </div>
@@ -417,7 +465,7 @@ export const World: React.FC = () => {
                                         boxShadow: 'inset 6px 6px 0px 0px #373737, inset -6px -6px 0px 0px #ffffff'
                                     }}
                                 >
-                                    <div className="space-y-1.5 sm:space-y-2 p-2 sm:p-6 pb-8">
+                                    <div className="p-2 sm:p-6 pb-8">
                                         {options.map((option, index) => {
                                             const isSelected = selectedOption === index;
                                             return (

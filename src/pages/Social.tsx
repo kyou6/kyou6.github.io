@@ -22,12 +22,12 @@ export const Social: React.FC = () => {
     const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
     const socialOptions = [
-        { label: "Gmail", color: "#EA4335", path: "mailto:contact@example.com", image: gmailIcon },
+        { label: "Gmail", color: "#EA4335", path: "mailto:carldominiquecruz@gmail.com", image: gmailIcon },
         { label: "Github", color: "#24292E", path: "https://github.com/kyou6", image: githubIcon },
-        { label: "LinkedIn", color: "#0A66C2", path: "https://linkedin.com", image: linkedinIcon },
-        { label: "Facebook", color: "#1877F2", path: "https://facebook.com", image: facebookIcon },
-        { label: "Instagram", color: "#E4405F", path: "https://instagram.com", image: instagramIcon },
-        { label: "Youtube", color: "#FF0000", path: "https://youtube.com", image: youtubeIcon }
+        { label: "LinkedIn", color: "#0A66C2", path: "https://www.linkedin.com/in/carlsugatan/", image: linkedinIcon },
+        { label: "Facebook", color: "#1877F2", path: "https://www.facebook.com/csugatan/", image: facebookIcon },
+        { label: "Instagram", color: "#E4405F", path: "https://www.instagram.com/ryou.mc/", image: instagramIcon },
+        { label: "Youtube", color: "#FF0000", path: "https://www.youtube.com/@csugatan", image: youtubeIcon }
     ];
 
     const handleOpenOption = useCallback((option: { path: string }) => {
@@ -104,11 +104,10 @@ export const Social: React.FC = () => {
                                 }}
                             >
                                 <div
-                                    className={`p-1 sm:p-2 w-full h-full text-center text-sm sm:text-md cursor-pointer relative pixel-corners-t ${
-                                        isActive
-                                            ? 'bg-[#c6c6c6] text-[#474747]'
-                                            : 'bg-[#8d8d8d] text-[#474747] hover:bg-[#9d9d9d]'
-                                    }`}
+                                    className={`p-1 sm:p-2 w-full h-full text-center text-sm sm:text-md cursor-pointer relative pixel-corners-t ${isActive
+                                        ? 'bg-[#c6c6c6] text-[#474747]'
+                                        : 'bg-[#8d8d8d] text-[#474747] hover:bg-[#9d9d9d]'
+                                        }`}
                                     style={{
                                         boxShadow: isActive
                                             ? 'inset 6px 6px 0px 0px #ffffff, inset -6px 0px 0px 0px #555555'
@@ -179,7 +178,7 @@ export const Social: React.FC = () => {
                                                     ) : (
                                                         <div className="w-7 h-7 sm:w-9 sm:h-9 border-2 border-black shrink-0" style={{ backgroundColor: option.color }} />
                                                     )}
-                                                    <span className="text-sm sm:text-lg md:text-xl text-left leading-none py-1 truncate">{option.label}</span>
+                                                    <span className="text-sm sm:text-lg md:text-xl text-left leading-none py-2 truncate">{option.label}</span>
                                                 </div>
                                             </MinecraftButton>
                                         );

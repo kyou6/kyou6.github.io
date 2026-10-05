@@ -44,7 +44,15 @@ body {
     margin: 0;
     min-width: 320px;
     min-height: 100vh;
+    cursor: url('./assets/ui/cursor.cur'), auto;
 }
+
+/* Use the same custom cursor for interactive elements */
+a, button, [role="button"], [tabindex], select, label,
+.cursor-pointer {
+    cursor: url('./assets/ui/cursor.cur'), pointer;
+}
+
 
 .pixelated {
     image-rendering: pixelated;
