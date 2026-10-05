@@ -1,11 +1,23 @@
 import React, { useEffect, useState } from 'react';
+import { useSettings } from '../context/SettingsContext';
 import dayBg from '../assets/background/day.png';
 import nightBg from '../assets/background/night.png';
 
 export const Background: React.FC = () => {
+    const { backgroundMode, animationsEnabled } = useSettings();
     const [nightOpacity, setNightOpacity] = useState(0);
 
     useEffect(() => {
+        if (backgroundMode === 'day') {
+            setNightOpacity(0);
+            return;
+        }
+        if (backgroundMode === 'night') {
+            setNightOpacity(1);
+            return;
+        }
+
+        // Auto mode — follows real time
         const updateTime = () => {
             const now = new Date();
             const hour = now.getHours() + now.getMinutes() / 60;
@@ -28,13 +40,15 @@ export const Background: React.FC = () => {
         updateTime();
         const interval = setInterval(updateTime, 1000 * 60); // Check every minute
         return () => clearInterval(interval);
-    }, []);
+    }, [backgroundMode]);
+
+    const panClass = animationsEnabled ? 'animate-pan-slow' : '';
 
     return (
         <>
-            <div className="fixed inset-0 bg-cover bg-center animate-pan-slow z-[-2]" style={{ backgroundImage: `url(${dayBg})` }} />
+            <div className={`fixed inset-0 bg-cover bg-center ${panClass} z-[-2]`} style={{ backgroundImage: `url(${dayBg})` }} />
             <div
-                className="fixed inset-0 bg-cover bg-center animate-pan-slow z-[-2]"
+                className={`fixed inset-0 bg-cover bg-center ${panClass} z-[-2]`}
                 style={{
                     backgroundImage: `url(${nightBg})`,
                     opacity: nightOpacity,
