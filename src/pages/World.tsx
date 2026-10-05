@@ -32,7 +32,15 @@ export const World: React.FC = () => {
     const tabs = ['Profile', 'Projects', 'Repository'];
     const [selectedTab, setSelectedTab] = useState('Profile');
     const [selectedOption, setSelectedOption] = useState(0);
-    const [isExpanded, setIsExpanded] = useState(true);
+    const [isExpanded, setIsExpanded] = useState<boolean>(() => {
+        const saved = localStorage.getItem('world-isExpanded');
+        return saved !== null ? saved === 'true' : true;
+    });
+
+    // Persist isExpanded to localStorage whenever it changes
+    useEffect(() => {
+        localStorage.setItem('world-isExpanded', String(isExpanded));
+    }, [isExpanded]);
     const [repos, setRepos] = useState<Array<{ label: string; color: string; path: string; image?: string }>>([]);
 
     const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -132,11 +140,7 @@ export const World: React.FC = () => {
             } else if (e.key === 'Escape') {
                 e.preventDefault();
                 playBackSound();
-                if (isExpanded) {
-                    setIsExpanded(false);
-                } else {
-                    navigate('/');
-                }
+                navigate('/');
             }
         };
 
@@ -534,11 +538,7 @@ export const World: React.FC = () => {
                         className="flex items-center gap-2 sm:gap-3 cursor-pointer drop-shadow-[2px_2px_0px_rgba(0,0,0,0.8)] hover:brightness-110"
                         onClick={() => {
                             playBackSound();
-                            if (isExpanded) {
-                                setIsExpanded(false);
-                            } else {
-                                navigate('/');
-                            }
+                            navigate('/');
                         }}
                     >
                         <img src={circleBtn} alt="Back" className="w-5 h-5 sm:w-8 sm:h-8 pixelated" />
